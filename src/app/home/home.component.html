@@ -1,0 +1,20 @@
+<div class="container">
+  <h1 class="title">
+    {{ 'PAGES.HOME.TITLE' | translate }}
+  </h1>
+
+  <mat-chip-set aria-label="Fish selection">
+    <mat-chip (click)="sendMessage()">One fish</mat-chip>
+    <mat-chip>Two fish</mat-chip>
+    <mat-chip>Three fish</mat-chip>
+    <mat-chip disabled>Four fish</mat-chip>
+  </mat-chip-set>
+
+  <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+    <mat-button-toggle value="bold">Bold</mat-button-toggle>
+    <mat-button-toggle value="italic">Italic</mat-button-toggle>
+    <mat-button-toggle value="underline">Underline</mat-button-toggle>
+  </mat-button-toggle-group>
+  
+  <a routerLink="/detail">{{ 'PAGES.HOME.GO_TO_DETAIL' | translate }}</a>
+</div>
