@@ -31,13 +31,17 @@ import { SettingsLayoutComponent, GeneralSettingsComponent, DisplaySettingsCompo
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
+import { JsonEditorComponent } from 'ang-jsoneditor'; // Import the component
+import { AiProvidersComponent } from './ai-providers/ai-providers.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     SettingsLayoutComponent,
     GeneralSettingsComponent,
     DisplaySettingsComponent,
-    NetworkSettingsComponent
+    NetworkSettingsComponent,
+    AiProvidersComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +53,8 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     HomeModule,
     DetailModule,
     AppRoutingModule,
+    
+    JsonEditorComponent,
     
     MatButtonModule,
     MatSlideToggleModule,

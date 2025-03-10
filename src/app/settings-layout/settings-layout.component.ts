@@ -1,4 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, Type } from '@angular/core';
+import { AiProvidersComponent } from '../ai-providers/ai-providers.component';
 
 // Example components for the right panel
 @Component({
@@ -33,13 +34,15 @@ export class SettingsLayoutComponent {
   items: SettingsItem[] = [
     { label: 'General', component: GeneralSettingsComponent, icon: 'settings' },
     { label: 'Display', component: DisplaySettingsComponent, icon: 'display_settings' },
-    { label: 'Network', component: NetworkSettingsComponent, icon: 'network_wifi' }
+    { label: 'Network', component: NetworkSettingsComponent, icon: 'network_wifi' },
+    { label: 'Providers', component: AiProvidersComponent, icon: 'network_wifi' }
   ];
   filteredItems: SettingsItem[] = [...this.items];
   selectedItem: SettingsItem | null = null;
   searchTerm: string = '';
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) { 
+  }
 
   selectItem(item: SettingsItem) {
     this.selectedItem = item;
