@@ -1,0 +1,47 @@
+<!-- <div class="settings-container">
+    <div class="left-panel">
+        <div class="search-box">
+            <mat-form-field class="search-box">
+                <input matInput placeholder="Search settings..." [(ngModel)]="searchTerm" (input)="filterItems()">
+            </mat-form-field>
+        </div>
+        <mat-nav-list>
+            <mat-list-item *ngFor="let item of filteredItems" (click)="selectItem(item)"
+                [class.selected]="selectedItem === item">
+                <mat-icon color="primary" matListIcon>{{ item.icon }}</mat-icon> {{ item.label }}
+            </mat-list-item>
+        </mat-nav-list>
+    </div>
+    <div class="right-panel">
+        <ng-container *ngIf="selectedItem">
+            <ng-container *ngComponentOutlet="selectedItem.component"></ng-container>
+        </ng-container>
+        <div *ngIf="!selectedItem">
+            <p>Select a setting from the left to view its content.</p>
+        </div>
+    </div>
+</div> -->
+
+<div class="settings-container">
+    <mat-sidenav-container class="sidenav-container">
+        <mat-sidenav #sidenav mode="side" opened class="left-panel">
+            <mat-form-field class="search-box">
+                <input matInput placeholder="Search settings..." [(ngModel)]="searchTerm" (input)="filterItems()">
+            </mat-form-field>
+            <mat-nav-list>
+                <mat-list-item *ngFor="let item of filteredItems" (click)="selectItem(item)"
+                    [class.selected]="selectedItem === item">
+                    <mat-icon color="primary" matListIcon>{{ item.icon }}</mat-icon> {{ item.label }}
+                </mat-list-item>
+            </mat-nav-list>
+        </mat-sidenav>
+        <mat-sidenav-content class="right-panel">
+            <ng-container *ngIf="selectedItem">
+                <ng-container *ngComponentOutlet="selectedItem.component"></ng-container>
+            </ng-container>
+            <div *ngIf="!selectedItem">
+                <p>Select a setting from the left to view its content.</p>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

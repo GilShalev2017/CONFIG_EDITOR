@@ -11,6 +11,12 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [CommonModule, SharedModule, HomeRoutingModule,MatChipsModule,MatButtonToggleModule]
+  imports: [
+     CommonModule, 
+     SharedModule,
+     HomeRoutingModule,
+     MatChipsModule,
+     MatButtonToggleModule,
+  ]
 })
 export class HomeModule {}

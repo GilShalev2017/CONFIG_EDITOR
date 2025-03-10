@@ -16,18 +16,32 @@ import { DetailModule } from './detail/detail.module';
 
 import { AppComponent } from './app.component';
 
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
- 
+import { MatIconModule } from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Import BrowserAnimationsModule
+
+import { SettingsLayoutComponent, GeneralSettingsComponent, DisplaySettingsComponent, NetworkSettingsComponent } from './settings-layout/settings-layout.component';
+
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    SettingsLayoutComponent,
+    GeneralSettingsComponent,
+    DisplaySettingsComponent,
+    NetworkSettingsComponent
+  ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     CoreModule,
@@ -35,9 +49,16 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     HomeModule,
     DetailModule,
     AppRoutingModule,
+    
     MatButtonModule,
     MatSlideToggleModule,
     MatButtonToggleModule,
+    MatSidenavModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatListModule,
+    MatIconModule,
+
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
