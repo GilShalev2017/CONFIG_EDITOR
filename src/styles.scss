@@ -53,3 +53,13 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';  // Or your preferred theme
+@import "~jsoneditor/dist/jsoneditor.min.css";
+textarea.jsoneditor-text{min-height:350px;}
+textarea.jsoneditor-text{min-width:600px;}
+
+:host ::ng-deep json-editor,
+:host ::ng-deep json-editor .jsoneditor,
+:host ::ng-deep json-editor > div,
+:host ::ng-deep json-editor jsoneditor-outer {
+  height: 500px;
+}

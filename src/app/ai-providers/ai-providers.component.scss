@@ -1,0 +1,14 @@
+/* In your component's CSS or global CSS */
+json-editor {
+    min-height: 400px; /* Adjust as needed */
+    width: 100%;
+    display: block;
+  }
+  
+  .jsoneditor {
+      height: 100%;
+  }
+  
+  .ace_editor.ace-jsoneditor {
+    min-height: 500px;
+  }

@@ -21,25 +21,27 @@ function writeXml(obj: any, callback: (err: Error | null) => void) {
   fs.writeFile(xmlFilePath, xml, callback);
 }
 
-ipcMain.handle('edit-xml', async (event, newData) => {
-  console.log("msg arrived !!!");
+ipcMain.handle('read-xml', async (event) => {
   return new Promise((resolve, reject) => {
     readXml((err, result) => {
       if (err) {
         reject(err);
         return;
       }
+      resolve(result); // Resolve with the parsed XML
+    });
+  });
+});
 
-      // Modify the 'result' object based on 'newData'
-      // Example: result.config.someElement[0] = newData.newValue;
-
-      writeXml(result, (writeErr) => {
-        if (writeErr) {
-          reject(writeErr);
-        } else {
-          resolve('XML updated successfully');
-        }
-      });
+ipcMain.handle('edit-xml', async (event, newData) => {
+  console.log("msg arrived !!!");
+  return new Promise((resolve, reject) => {
+    writeXml(newData, (writeErr) => {
+      if (writeErr) {
+        reject(writeErr);
+      } else {
+        resolve('XML updated successfully');
+      }
     });
   });
 });
@@ -56,10 +58,10 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    // width: size.width,
-    // height: size.height,
-    height: 600,
-    width: 800,
+    width: size.width,
+    height: size.height,
+    //height: 600,
+    //width: 800,
     //autoHideMenuBar: false,
     //frame: false, // Remove the window frame
     //transparent: true, // Make the window transparent

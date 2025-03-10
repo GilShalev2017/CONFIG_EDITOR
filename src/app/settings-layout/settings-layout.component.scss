@@ -1,47 +1,45 @@
-.settings-container {
-    display: flex;
-    height: 100vh;
-}
+// .settings-container {
+//     display: flex;
+//     height: 100vh;
+// }
 
-.left-panel {
-    width: 250px;
-    background-color: #f0f0f0;
-    border-right: 1px solid #ccc;
-    padding: 10px;
-}
+// .left-panel {
+//     width: 250px;
+//     background-color: #f0f0f0;
+//     border-right: 1px solid #ccc;
+//     padding: 10px;
+// }
 
-.search-box {
-    margin-bottom: 10px;
-}
+// .search-box {
+//     margin-bottom: 10px;
+// }
 
-.search-box input {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-}
+// .search-box input {
+//     width: 100%;
+//     padding: 5px;
+//     border: 1px solid #ccc;
+// }
 
-.settings-tree {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+// .settings-tree {
+//     list-style: none;
+//     padding: 0;
+//     margin: 0;
+// }
 
-.settings-tree li {
-    padding: 8px;
-    cursor: pointer;
-}
+// .settings-tree li {
+//     padding: 8px;
+//     cursor: pointer;
+// }
 
-.settings-tree li:hover,
-.settings-tree li.selected {
-    background-color: #e0e0e0;
-}
+// .settings-tree li:hover,
+// .settings-tree li.selected {
+//     background-color: #e0e0e0;
+// }
 
-.right-panel {
-    flex: 1;
-    padding: 20px;
-}
-
-
+// .right-panel {
+//     flex: 1;
+//     padding: 20px;
+// }
 
 
 
@@ -49,6 +47,7 @@
 
 .settings-container {
     height: 100vh;
+    // display: flex;
   }
   
   .sidenav-container {
@@ -56,7 +55,8 @@
   }
   
   .left-panel {
-    width: 250px;
+    width: 200px;
+    //width: 10%;
     padding: 10px;
   }
   

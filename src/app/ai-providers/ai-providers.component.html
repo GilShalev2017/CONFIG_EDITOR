@@ -1,4 +1,11 @@
 <div>
-    <p>ai-providers works!</p>
-    <json-editor [options]="editorOptions" [data]="data"></json-editor>
+    <json-editor [options]="editorOptions" [data]="data" (change)="updateData($event)"></json-editor>
+    <button (click)="saveXml()">Save XML</button>
+
+
+    <!-- <form  [formGroup]="form" (submit)="submit()">
+        <json-editor [options]="editorOptions" formControlName="myinput">
+        </json-editor>
+    </form> -->
+
 </div>
