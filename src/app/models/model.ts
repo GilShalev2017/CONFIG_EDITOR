@@ -1,0 +1,35 @@
+export interface InsightType{
+  name: string;
+  displayName: string;
+  sourceInsightType?: string;
+  sourcedata?: string;
+}
+
+export interface Provider {
+  //Common to all providers
+  name: string;
+  displayName: string;
+  description?: string;
+  cost: number;
+  apiUrl?: string;
+  apiInternalKey: string;
+  insightTypes: InsightType[];
+  //Varied properties
+  //Whisper
+  modelType?: string; 
+  timeoutInMinutes?: number; 
+  //Azure
+  location?: string; 
+  //Speechmatix
+  serviceType?: string 
+  apiKey?: string; 
+  //AzureVideoIndexer
+  entraclientid?: string;
+  entratenantid?: string;
+  armvilocation?: string;
+  armviaccountname?: string;
+  armviaccountid?: string;
+  armvisubscriptionid?: string;
+  armviresourcegroup?: string;
+  languagesUrl?: string; 
+}

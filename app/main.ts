@@ -4,16 +4,17 @@ import * as fs from 'fs';
 import * as xml2js from 'xml2js';
 
 const xmlFilePath = "C:\\ActDev\\src\\Services\\ActIntelligenceService\\InsightProviders.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
+//const xmlFilePath = "C:\\Actus\\Config\\InsightProviders.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
 
-function readXml(callback: (err: Error | null, result: any) => void) {
-  fs.readFile(xmlFilePath, 'utf8', (err, data) => {
-    if (err) {
-      callback(err, null);
-      return;
-    }
-    xml2js.parseString(data, callback);
-  });
-}
+// function readXml(callback: (err: Error | null, result: any) => void) {
+//   fs.readFile(xmlFilePath, 'utf8', (err, data) => {
+//     if (err) {
+//       callback(err, null);
+//       return;
+//     }
+//     xml2js.parseString(data, callback);
+//   });
+// }
 
 function writeXml(obj: any, callback: (err: Error | null) => void) {
   const builder = new xml2js.Builder();
@@ -34,7 +35,6 @@ ipcMain.handle('read-xml', async (event) => {
 });
 
 ipcMain.handle('edit-xml', async (event, newData) => {
-  console.log("msg arrived !!!");
   return new Promise((resolve, reject) => {
     writeXml(newData, (writeErr) => {
       if (writeErr) {
@@ -46,9 +46,27 @@ ipcMain.handle('edit-xml', async (event, newData) => {
   });
 });
 
+
+
+function readXml(callback: (err: Error | null, result: any) => void) {
+  fs.readFile(xmlFilePath, 'utf8', (err, data) => {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    xml2js.parseString(data, (parseErr, result) => {
+      if (parseErr) {
+        callback(parseErr, null);
+        return;
+      }
+      console.log(JSON.stringify(result, null, 2)); // Log the parsed object
+      callback(null, result); // Return the parsed object
+    });
+  });
+}
+
 let win: BrowserWindow | null = null;
-const args = process.argv.slice(1),
-  serve = args.some(val => val === '--serve');
+const args = process.argv.slice(1), serve = args.some(val => val === '--serve');
 
 function createWindow(): BrowserWindow {
 
@@ -60,6 +78,7 @@ function createWindow(): BrowserWindow {
     y: 0,
     width: size.width,
     height: size.height,
+    //show: true,
     //height: 600,
     //width: 800,
     //autoHideMenuBar: false,
@@ -67,13 +86,15 @@ function createWindow(): BrowserWindow {
     //transparent: true, // Make the window transparent
     //alwaysOnTop: true, // Keep the window on top (optional)
     //skipTaskbar: true, // Hide from taskbar (optional)
-    
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve),
       contextIsolation: false,
     },
   });
+
+  win.setMenu(null);
+
 
   if (serve) {
     const debug = require('electron-debug');
@@ -133,3 +154,112 @@ try {
   // Catch Error
   // throw e;
 }
+
+/*
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as xml2js from 'xml2js';
+
+const xmlFilePath = "C:\\ActDev\\src\\Services\\ActIntelligenceService\\InsightProviders.xml";
+
+function readXml(callback: (err: Error | null, result: any) => void) {
+  fs.readFile(xmlFilePath, 'utf8', (err, data) => {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+    xml2js.parseString(data, callback);
+  });
+}
+
+function writeXml(obj: any, callback: (err: Error | null) => void) {
+  const builder = new xml2js.Builder();
+  const xml = builder.buildObject(obj);
+  fs.writeFile(xmlFilePath, xml, callback);
+}
+
+ipcMain.handle('read-xml', async () => {
+  return new Promise((resolve, reject) => {
+    readXml((err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+});
+
+ipcMain.handle('edit-xml', async (_, newData) => {
+  return new Promise((resolve, reject) => {
+    writeXml(newData, (writeErr) => {
+      if (writeErr) {
+        reject(writeErr);
+      } else {
+        resolve('XML updated successfully');
+      }
+    });
+  });
+});
+
+let mainWindow: BrowserWindow | null = null;
+const args = process.argv.slice(1),
+  serve = args.includes('--serve');
+
+app.whenReady().then(() => {
+  const size = screen.getPrimaryDisplay().workAreaSize;
+
+  mainWindow = new BrowserWindow({
+    width: size.width,
+    height: size.height,
+    show: true, // Ensure the window is shown immediately
+    webPreferences: {
+      nodeIntegration: true,
+      allowRunningInsecureContent: serve,
+      contextIsolation: false,
+    },
+  });
+
+  mainWindow.setMenu(null);
+
+  if (serve) {
+    const debug = require('electron-debug');
+    debug();
+    require('electron-reloader')(module);
+    mainWindow.loadURL('http://localhost:4200');
+  } else {
+    mainWindow.loadURL(`file://${path.join(__dirname, '../dist/index.html')}`);
+  }
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('activate', () => {
+  if (mainWindow === null) {
+    app.whenReady().then(() => {
+      mainWindow = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        webPreferences: {
+          nodeIntegration: true,
+        },
+      });
+
+      mainWindow.loadURL(`file://${path.join(__dirname, '../dist/index.html')}`);
+
+      mainWindow.on('closed', () => {
+        mainWindow = null;
+      });
+    });
+  }
+});
+*/
