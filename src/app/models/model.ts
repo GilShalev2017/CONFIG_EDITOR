@@ -32,4 +32,6 @@ export interface Provider {
   armvisubscriptionid?: string;
   armviresourcegroup?: string;
   languagesUrl?: string; 
+  //FOR UI
+  showFullText?: boolean;
 }

@@ -65,3 +65,22 @@ mat-card {
   align-items: center;
   gap: 8px;
 }
+
+mat-card-content {
+  max-height: 120px; /* Set your desired height here */
+  overflow: hidden;
+  position: relative;
+}
+
+.truncated {
+  max-height: 120px; /* Adjust as needed */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+mat-card-actions button {
+  margin-top: 10px;
+}

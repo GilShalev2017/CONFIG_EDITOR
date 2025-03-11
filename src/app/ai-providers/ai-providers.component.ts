@@ -83,7 +83,9 @@ export class AiProvidersComponent implements OnInit{
         armviaccountid: provider.armviaccountid || undefined,
         armvisubscriptionid: provider.armvisubscriptionid || undefined,
         armviresourcegroup: provider.armviresourcegroup || undefined,
-        languagesUrl: provider.languagesUrl || undefined
+        languagesUrl: provider.languagesUrl || undefined,
+
+        showFullText: false
       }));
   
       console.log('Providers:', this.providers.length);
@@ -138,4 +140,16 @@ export class AiProvidersComponent implements OnInit{
     };
     return `assets/provider-icons/${icons[providerName] || 'default.png'}`;
   }
+
+  toggleText(provider: any) {
+    provider.showFullText = !provider.showFullText;
+  }
+
+  isDescriptionLong(provider: any): boolean {
+    const description = String(provider.description ?? '');
+    console.log('Checking description:', description);
+    console.log('Description length:', description.length);
+    return description.length > 100;
+  }
+  
 }
