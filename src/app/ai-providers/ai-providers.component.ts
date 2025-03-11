@@ -3,6 +3,7 @@ import { JsonEditorOptions } from 'ang-jsoneditor';
 import { ElectronService } from '../core/services';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Provider } from '../models/model';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-ai-providers',
@@ -16,6 +17,12 @@ export class AiProvidersComponent implements OnInit{
   public editorOptions: JsonEditorOptions;
   public data: any;
   
+  transcriptionProviders: Provider[] = [];
+  translationProviders: Provider[] = [];
+  textAnalysisProviders: Provider[] = [];
+  //faceDetectionProviders: Provider[] = [];
+  otherProviders: Provider[] = [];
+
   providers: Provider[] = [];
   
   firstFormGroup = this._formBuilder.group({
@@ -39,15 +46,6 @@ export class AiProvidersComponent implements OnInit{
     this.loadXml();
   }
 
-  // async loadXml() {
-  //   try {
-  //     this.data = await this.electronService.ipcRenderer.invoke('read-xml'); // Invoke read-xml
-  //     console.log('XML loaded:', this.data);
-  //   } catch (error) {
-  //     console.error('Error loading XML:', error);
-  //   }
-  // }
-
   async loadXml() {
     try {
       const xmlString = await this.electronService.ipcRenderer.invoke('read-xml');
@@ -59,8 +57,8 @@ export class AiProvidersComponent implements OnInit{
   
       // Define the array of Provider objects
       this.providers = providersArr.map((provider: any) => ({
-        name: provider.name,
-        displayName: provider.displayName,
+        name: provider.$?.name || '', // Extract name from '$'
+        displayName: provider.$?.displayname || '', // Extract displayname from '$'
         description: provider.description || undefined,
         cost: provider.cost,
         apiUrl: provider.apiUrl || undefined,
@@ -90,12 +88,31 @@ export class AiProvidersComponent implements OnInit{
   
       console.log('Providers:', this.providers.length);
   
+      this.transcriptionProviders = this.providers.filter(p => p.name.includes('Transcriber'));
+      this.translationProviders = this.providers.filter(p => p.name.includes('Translator'));
+      this.textAnalysisProviders = this.providers.filter(p => p.name.includes('TextAnalysis'));
+      this.otherProviders = this.providers.filter(p => 
+        !this.transcriptionProviders.includes(p) &&
+        !this.translationProviders.includes(p) &&
+        !this.textAnalysisProviders.includes(p)
+      );
       // Further logic to use providers array
     } catch (error) {
       console.error('Error loading XML:', error);
     }
   }
   
+  drop(event: CdkDragDrop<any[]>, type: string) {
+    if (type === 'transcription') {
+      moveItemInArray(this.transcriptionProviders, event.previousIndex, event.currentIndex);
+    } else if (type === 'translation') {
+      moveItemInArray(this.translationProviders, event.previousIndex, event.currentIndex);
+    } else if (type === 'textAnalysis') {
+      moveItemInArray(this.textAnalysisProviders, event.previousIndex, event.currentIndex);
+    } else if (type === 'others') {
+      moveItemInArray(this.otherProviders, event.previousIndex, event.currentIndex);
+    }
+  }
   
   async saveXml() {
     try {

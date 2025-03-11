@@ -25,6 +25,9 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatCardModule} from '@angular/material/card';
+
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Import BrowserAnimationsModule
 
@@ -58,6 +61,8 @@ import { AiProvidersComponent } from './ai-providers/ai-providers.component';
     
     JsonEditorComponent,
     
+    DragDropModule,
+    
     MatButtonModule,
     MatSlideToggleModule,
     MatButtonToggleModule,
@@ -67,6 +72,8 @@ import { AiProvidersComponent } from './ai-providers/ai-providers.component';
     MatListModule,
     MatIconModule,
     MatStepperModule,
+    MatCardModule,
+
     FormsModule,
     ReactiveFormsModule,
     
