@@ -26,7 +26,7 @@ export class AiProvidersComponent implements OnInit{
   providers: Provider[] = [];
   
   firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+    // firstCtrl: ['', Validators.required],
   });
   secondFormGroup = this._formBuilder.group({
     secondCtrl: ['', Validators.required],
@@ -126,5 +126,16 @@ export class AiProvidersComponent implements OnInit{
   updateData(event: any) {
     this.data = event; // Update this.data with the changed data
     console.log("data changed: ", this.data);
+  }
+
+  getProviderIcon(providerName: string): string {
+    const icons: { [key: string]: string } = {
+      'Whisper': 'whisper.png',
+      'Open AI': 'openai.png',
+      'Speechmatix': 'speechmatix.png',
+      'Azure': 'azure.png',
+      'ClosedCaption Transcriber': 'closed-captions.png'
+    };
+    return `assets/provider-icons/${icons[providerName] || 'default.png'}`;
   }
 }

@@ -3,44 +3,30 @@
     <mat-step [stepControl]="firstFormGroup">
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Configure AI Providers</ng-template>
-        <mat-form-field>
-          <mat-label>Name</mat-label>
-          <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
-        </mat-form-field>
-
-        <!-- <div class="providers-container">
-          <mat-card *ngFor="let provider of providers" class="provider-card">
-            <mat-card-header>
-              <mat-card-title>{{ provider.displayName }}</mat-card-title>
-              <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
-            </mat-card-header>
-
-            <mat-card-content>
-              <p><strong>API Key:</strong> {{ provider.apiInternalKey }}</p>
-              <p><strong>API URL:</strong> {{ provider.apiUrl }}</p>
-              <p><strong>Cost:</strong> {{ provider.cost }}</p>
-            </mat-card-content>
-
-            <mat-card-actions>
-              <button mat-button color="primary">Configure</button>
-              <button mat-button color="warn">Delete</button>
-            </mat-card-actions>
-          </mat-card>
-        </div> -->
-
+        <h2>Arrange the providers within each column by dragging and dropping them, with the topmost provider receiving the highest priority.</h2>
+        <br>
         <div class="providers-container">
           <div class="column">
+            <!-- <div class="column-header"> -->
+            <mat-icon>audiotrack</mat-icon>
+            <mat-icon>mic_none</mat-icon>
+            <mat-icon>headset_mic</mat-icon>
+            <mat-icon>perm_camera_mic</mat-icon>
             <h3>Transcribers</h3>
+            <!-- </div> -->
             <div cdkDropList (cdkDropListDropped)="drop($event, 'transcription')">
               <mat-card *ngFor="let provider of transcriptionProviders" cdkDrag>
                 <mat-card-header>
+                  <div mat-card-avatar>
+                    <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
+                      height="40">
+                  </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
                   <p><strong>API Key:</strong> {{ provider.apiInternalKey }}</p>
                   <p><strong>API URL:</strong> {{ provider.apiUrl }}</p>
-                  <!-- <p><strong>Cost:</strong> {{ provider.cost }}</p> -->
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary">Configure</button>
@@ -50,17 +36,24 @@
             </div>
           </div>
           <div class="column">
+            <mat-icon>language</mat-icon>
+            <mat-icon>text_rotation_none</mat-icon>
+            <!-- <mat-icon>headset_mic</mat-icon>
+            <mat-icon>perm_camera_mic</mat-icon> -->
             <h3>Translators</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'translation')">
               <mat-card *ngFor="let provider of translationProviders" cdkDrag>
                 <mat-card-header>
+                  <div mat-card-avatar>
+                    <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
+                      height="40">
+                  </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
                   <p><strong>API Key:</strong> {{ provider.apiInternalKey }}</p>
                   <p><strong>API URL:</strong> {{ provider.apiUrl }}</p>
-                  <!-- <p><strong>Cost:</strong> {{ provider.cost }}</p> -->
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary">Configure</button>
@@ -70,17 +63,24 @@
             </div>
           </div>
           <div class="column">
+            <mat-icon>text_fields</mat-icon>
+            <mat-icon>wrap_text</mat-icon>
+            <mat-icon>find_replace</mat-icon>
+            <!-- <mat-icon>perm_camera_mic</mat-icon> -->
             <h3>Text Analyzers</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'textAnalysis')">
               <mat-card *ngFor="let provider of textAnalysisProviders" cdkDrag>
                 <mat-card-header>
+                  <div mat-card-avatar>
+                    <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
+                      height="40">
+                  </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
                   <p><strong>API Key:</strong> {{ provider.apiInternalKey }}</p>
                   <p><strong>API URL:</strong> {{ provider.apiUrl }}</p>
-                  <!-- <p><strong>Cost:</strong> {{ provider.cost }}</p> -->
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary">Configure</button>
@@ -90,17 +90,24 @@
             </div>
           </div>
           <div class="column">
+            <mat-icon>tag_faces</mat-icon>
+            <mat-icon>favorite</mat-icon>
+            <mat-icon>feedback</mat-icon>
+            <mat-icon>face</mat-icon>
             <h3>Others</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'others')">
               <mat-card *ngFor="let provider of otherProviders" cdkDrag>
                 <mat-card-header>
+                  <div mat-card-avatar>
+                    <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
+                      height="40">
+                  </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
                   <p><strong>API Key:</strong> {{ provider.apiInternalKey }}</p>
                   <p><strong>API URL:</strong> {{ provider.apiUrl }}</p>
-                  <!-- <p><strong>Cost:</strong> {{ provider.cost }}</p> -->
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary">Configure</button>
@@ -129,7 +136,7 @@
       </form>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Test Providers 123</ng-template>
+      <ng-template matStepLabel>Test Providers</ng-template>
       <p>You are now done.</p>
       <div>
         <button mat-button matStepperPrevious>Back</button>
@@ -137,6 +144,4 @@
       </div>
     </mat-step>
   </mat-stepper>
-
-
 </div>
