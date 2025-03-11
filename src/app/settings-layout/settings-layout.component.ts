@@ -32,10 +32,10 @@ interface SettingsItem {
 })
 export class SettingsLayoutComponent {
   items: SettingsItem[] = [
-    { label: 'General', component: GeneralSettingsComponent, icon: 'settings' },
+    { label: 'System Config', component: GeneralSettingsComponent, icon: 'settings' },
     { label: 'Display', component: DisplaySettingsComponent, icon: 'display_settings' },
     // { label: 'Network', component: NetworkSettingsComponent, icon: 'network_wifi' },
-    { label: 'Providers', component: AiProvidersComponent, icon: 'network_wifi' }
+    { label: 'AI Providers', component: AiProvidersComponent, icon: 'network_wifi' }
   ];
   filteredItems: SettingsItem[] = [...this.items];
   selectedItem: SettingsItem | null = null;

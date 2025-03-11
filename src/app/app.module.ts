@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
@@ -16,14 +16,16 @@ import { DetailModule } from './detail/detail.module';
 
 import { AppComponent } from './app.component';
 
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule}  from '@angular/material/list';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import { MatIconModule } from '@angular/material/icon';
+import {MatIconModule} from '@angular/material/icon';
+import {MatStepperModule} from '@angular/material/stepper';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Import BrowserAnimationsModule
 
 import { SettingsLayoutComponent, GeneralSettingsComponent, DisplaySettingsComponent, NetworkSettingsComponent } from './settings-layout/settings-layout.component';
@@ -64,7 +66,10 @@ import { AiProvidersComponent } from './ai-providers/ai-providers.component';
     MatInputModule,
     MatListModule,
     MatIconModule,
-
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule,
+    
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JsonEditorOptions } from 'ang-jsoneditor';
 import { ElectronService } from '../core/services';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-ai-providers',
@@ -13,16 +14,18 @@ export class AiProvidersComponent implements OnInit{
 
   public editorOptions: JsonEditorOptions;
   public data: any;
-  form: any;
   
-  constructor(private electronService: ElectronService) {
+  firstFormGroup = this._formBuilder.group({
+    firstCtrl: ['', Validators.required],
+  });
+  secondFormGroup = this._formBuilder.group({
+    secondCtrl: ['', Validators.required],
+  });
+  isLinear = true
+  
+  constructor(private electronService: ElectronService,private _formBuilder: FormBuilder) {
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['tree'];//['code', 'text', 'tree', 'view']; // Set allowed modes
-    //this.data = {"products":[{"name":"car","product":[{"name":"honda","model":[{"id":"civic","name":"civic"},{"id":"accord","name":"accord"},{"id":"crv","name":"crv"},{"id":"pilot","name":"pilot"},{"id":"odyssey","name":"odyssey"}]}]}]}
-
-    // this.form = this.fb.group({
-    //   myinput: [this.data]
-    // });
   }
 
   submit() {
