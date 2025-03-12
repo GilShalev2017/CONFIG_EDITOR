@@ -31,13 +31,20 @@ json-editor {
 .providers-container {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
 }
+
+// .column {
+//   flex: 1;
+//   min-width: 250px;
+//   max-width: 300px;
+// }
 
 .column {
   flex: 1;
-  min-width: 250px;
-  max-width: 300px;
+  min-width: 220px; /* Adjust column width */
+  padding: 8px; /* Reduce padding */
+  box-sizing: border-box;
 }
 
 cdk-drop {
@@ -83,4 +90,37 @@ mat-card-content {
 
 mat-card-actions button {
   margin-top: 10px;
+}
+
+// mat-card-header {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between; /* Pushes checkbox to the right */
+// }
+
+// .checkbox-container {
+//   display: flex;
+//   align-items: center;
+// }
+mat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Push checkbox to the right */
+  position: relative;
+}
+
+.checkbox-container {
+  margin-left: auto; /* Pushes checkbox to the right */
+  display: flex;
+  align-items: center;
+}
+
+.disabled-card {
+  opacity: 0.5; /* Make it look disabled */
+  pointer-events: none; /* Disable interactions */
+  filter: grayscale(80%); /* Optional: Make it visually distinct */
+}
+
+.disabled-card .checkbox-container {
+  pointer-events: all; /* Allow checkbox to remain clickable */
 }

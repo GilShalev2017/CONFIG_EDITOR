@@ -26,6 +26,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
@@ -73,7 +74,8 @@ import { AiProvidersComponent } from './ai-providers/ai-providers.component';
     MatIconModule,
     MatStepperModule,
     MatCardModule,
-
+    MatCheckboxModule,
+    
     FormsModule,
     ReactiveFormsModule,
     

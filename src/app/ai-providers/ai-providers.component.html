@@ -3,8 +3,9 @@
     <mat-step [stepControl]="firstFormGroup">
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Configure AI Providers</ng-template>
-        <h2><i>Arrange the providers within each column by dragging and dropping them, with the topmost provider receiving
-          the highest priority.</i></h2>
+        <h2><i>Arrange the providers within each column by dragging and dropping them, with the topmost provider
+            receiving
+            the highest priority.</i></h2>
         <br>
         <div class="providers-container">
           <div class="column">
@@ -16,7 +17,8 @@
             <h3>Transcribers</h3>
             <!-- </div> -->
             <div cdkDropList (cdkDropListDropped)="drop($event, 'transcription')">
-              <mat-card *ngFor="let provider of transcriptionProviders" cdkDrag>
+              <mat-card *ngFor="let provider of transcriptionProviders" cdkDrag
+                [ngClass]="{'disabled-card': !provider.enabled}">
                 <mat-card-header>
                   <div mat-card-avatar>
                     <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
@@ -24,9 +26,11 @@
                   </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
+                  <div class="checkbox-container">
+                    <mat-checkbox [checked]="provider.enabled" color="primary"
+                      (change)="toggleProvider(provider)"></mat-checkbox>
+                  </div>
                 </mat-card-header>
-                <!-- [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}" -->
-                <!-- [ngClass]="provider.showFullText ? 'expanded' : 'truncated'" -->
                 <mat-card-content
                   [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
                   <p>{{ provider.description }}</p>
@@ -44,11 +48,10 @@
           <div class="column">
             <mat-icon>language</mat-icon>
             <mat-icon>text_rotation_none</mat-icon>
-            <!-- <mat-icon>headset_mic</mat-icon>
-            <mat-icon>perm_camera_mic</mat-icon> -->
             <h3>Translators</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'translation')">
-              <mat-card *ngFor="let provider of translationProviders" cdkDrag>
+              <mat-card *ngFor="let provider of translationProviders" cdkDrag
+                [ngClass]="{'disabled-card': !provider.enabled}">
                 <mat-card-header>
                   <div mat-card-avatar>
                     <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
@@ -56,8 +59,13 @@
                   </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
+                  <div class="checkbox-container">
+                    <mat-checkbox [checked]="provider.enabled" color="primary"
+                      (change)="toggleProvider(provider)"></mat-checkbox>
+                  </div>
                 </mat-card-header>
-                <mat-card-content [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
+                <mat-card-content
+                  [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
@@ -74,10 +82,10 @@
             <mat-icon>text_fields</mat-icon>
             <mat-icon>wrap_text</mat-icon>
             <mat-icon>find_replace</mat-icon>
-            <!-- <mat-icon>perm_camera_mic</mat-icon> -->
             <h3>Text Analyzers</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'textAnalysis')">
-              <mat-card *ngFor="let provider of textAnalysisProviders" cdkDrag>
+              <mat-card *ngFor="let provider of textAnalysisProviders" cdkDrag
+                [ngClass]="{'disabled-card': !provider.enabled}">
                 <mat-card-header>
                   <div mat-card-avatar>
                     <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
@@ -85,8 +93,13 @@
                   </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
+                  <div class="checkbox-container">
+                    <mat-checkbox [checked]="provider.enabled" color="primary"
+                      (change)="toggleProvider(provider)"></mat-checkbox>
+                  </div>
                 </mat-card-header>
-                <mat-card-content [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
+                <mat-card-content
+                  [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
@@ -106,7 +119,8 @@
             <mat-icon>face</mat-icon>
             <h3>Others</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'others')">
-              <mat-card *ngFor="let provider of otherProviders" cdkDrag>
+              <mat-card *ngFor="let provider of otherProviders" cdkDrag
+                [ngClass]="{'disabled-card': !provider.enabled}">
                 <mat-card-header>
                   <div mat-card-avatar>
                     <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
@@ -114,8 +128,13 @@
                   </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
+                  <div class="checkbox-container">
+                    <mat-checkbox [checked]="provider.enabled" color="primary"
+                      (change)="toggleProvider(provider)"></mat-checkbox>
+                  </div>
                 </mat-card-header>
-                <mat-card-content [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
+                <mat-card-content
+                  [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>

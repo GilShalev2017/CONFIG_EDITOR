@@ -34,4 +34,5 @@ export interface Provider {
   languagesUrl?: string; 
   //FOR UI
   showFullText?: boolean;
+  enabled?: boolean;
 }

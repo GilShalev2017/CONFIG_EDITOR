@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { JsonEditorOptions } from 'ang-jsoneditor';
 import { ElectronService } from '../core/services';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -33,7 +33,7 @@ export class AiProvidersComponent implements OnInit{
   });
   isLinear = true
   
-  constructor(private electronService: ElectronService,private _formBuilder: FormBuilder) {
+  constructor(private electronService: ElectronService,private _formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
     this.editorOptions = new JsonEditorOptions();
     this.editorOptions.modes = ['tree'];//['code', 'text', 'tree', 'view']; // Set allowed modes
   }
@@ -85,7 +85,8 @@ export class AiProvidersComponent implements OnInit{
         armviresourcegroup: provider.armviresourcegroup || undefined,
         languagesUrl: provider.languagesUrl || undefined,
 
-        showFullText: false
+        showFullText: false,
+        enabled: true
       }));
   
       console.log('Providers:', this.providers.length);
@@ -152,4 +153,8 @@ export class AiProvidersComponent implements OnInit{
     return description.length > 100;
   }
   
+  toggleProvider(provider: any) {
+    provider.enabled = !provider.enabled;
+    this.cdr.detectChanges(); // Force update
+  }
 }
