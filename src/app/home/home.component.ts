@@ -17,8 +17,8 @@ export class HomeComponent implements OnInit {
     console.log('HomeComponent INIT');
   }
 
-  sendMessage() {
-    console.log("HomeComponent sending")
-    this.electronService.editXml("C:\\Actus\\Config.xml");
-  }
+  // sendMessage() {
+  //   console.log("HomeComponent sending")
+  //   this.electronService.editXml("C:\\Actus\\Config.xml");
+  // }
 }

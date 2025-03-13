@@ -3,52 +3,14 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as xml2js from 'xml2js';
 
-const xmlFilePath = "C:\\ActDev\\src\\Services\\ActIntelligenceService\\InsightProviders.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
-//const xmlFilePath = "C:\\Actus\\Config\\InsightProviders.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
-
-// function readXml(callback: (err: Error | null, result: any) => void) {
-//   fs.readFile(xmlFilePath, 'utf8', (err, data) => {
-//     if (err) {
-//       callback(err, null);
-//       return;
-//     }
-//     xml2js.parseString(data, callback);
-//   });
-// }
-
-function writeXml(obj: any, callback: (err: Error | null) => void) {
-  const builder = new xml2js.Builder();
-  const xml = builder.buildObject(obj);
-  fs.writeFile(xmlFilePath, xml, callback);
-}
-
-ipcMain.handle('read-xml', async (event) => {
-  return new Promise((resolve, reject) => {
-    readXml((err, result) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(result); // Resolve with the parsed XML
-    });
-  });
-});
-
-ipcMain.handle('edit-xml', async (event, newData) => {
-  return new Promise((resolve, reject) => {
-    writeXml(newData, (writeErr) => {
-      if (writeErr) {
-        reject(writeErr);
-      } else {
-        resolve('XML updated successfully');
-      }
-    });
-  });
-});
+//TODO read the paths from a dedicated path, filled by the user where C:\Actus\Config is located!
+const insightProvidersXmlFilePath = "C:\\ActDev\\src\\Services\\ActIntelligenceService\\InsightProviders.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
+//const insightProvidersXmlFilePath = "C:\\Actus\\Config\\InsightProviders.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
+const aiLanguagesXmlFilePath = "C:\\ActDev\\src\\Services\\ActIntelligenceService\\AILanguages.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
+//const insightProvidersXmlFilePath = "C:\\Actus\\Config\\AILanguages.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
 
 
-
-function readXml(callback: (err: Error | null, result: any) => void) {
+function readXml(xmlFilePath: string, callback: (err: Error | null, result: any) => void) {
   fs.readFile(xmlFilePath, 'utf8', (err, data) => {
     if (err) {
       callback(err, null);
@@ -64,6 +26,40 @@ function readXml(callback: (err: Error | null, result: any) => void) {
     });
   });
 }
+
+function writeXml(xmlFilePath: string, obj: any, callback: (err: Error | null) => void) {
+  const builder = new xml2js.Builder();
+  const xml = builder.buildObject(obj);
+  fs.writeFile(xmlFilePath, xml, callback);
+}
+
+ipcMain.handle('read-insight-providers-xml', async (event) => {
+  return new Promise((resolve, reject) => {
+    readXml(insightProvidersXmlFilePath,(err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result); // Resolve with the parsed XML
+    });
+  });
+});
+
+ipcMain.handle('save-insight-providers-xml', async (event, newData) => {
+  return new Promise((resolve, reject) => {
+    writeXml(insightProvidersXmlFilePath, newData, (writeErr) => {
+      if (writeErr) {
+        reject(writeErr);
+      } else {
+        resolve('XML updated successfully');
+      }
+    });
+  });
+});
+
+
+
+
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1), serve = args.some(val => val === '--serve');
@@ -155,6 +151,16 @@ try {
   // throw e;
 }
 
+
+
+
+
+
+
+
+
+
+
 /*
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import * as path from 'path';
@@ -191,7 +197,7 @@ ipcMain.handle('read-xml', async () => {
   });
 });
 
-ipcMain.handle('edit-xml', async (_, newData) => {
+ipcMain.handle('save-insight-providers-xml', async (_, newData) => {
   return new Promise((resolve, reject) => {
     writeXml(newData, (writeErr) => {
       if (writeErr) {

@@ -48,7 +48,7 @@ export class AiProvidersComponent implements OnInit{
 
   async loadXml() {
     try {
-      const xmlString = await this.electronService.ipcRenderer.invoke('read-xml');
+      const xmlString = await this.electronService.ipcRenderer.invoke('read-insight-providers-xml');
       console.log('XML loaded:', xmlString);
   
       const providersStr = xmlString['configuration']['aiProviders'];
@@ -119,7 +119,7 @@ export class AiProvidersComponent implements OnInit{
   
   async saveXml() {
     try {
-      await this.electronService.ipcRenderer.invoke('edit-xml', this.data); // Invoke edit-xml
+      await this.electronService.ipcRenderer.invoke('save-insight-providers-xml', this.data); 
       console.log('XML saved successfully');
     } catch (error) {
       console.error('Error saving XML:', error);
