@@ -21,7 +21,7 @@ function readXml(xmlFilePath: string, callback: (err: Error | null, result: any)
         callback(parseErr, null);
         return;
       }
-      console.log(JSON.stringify(result, null, 2)); // Log the parsed object
+      //console.log(JSON.stringify(result, null, 2)); // Log the parsed object
       callback(null, result); // Return the parsed object
     });
   });
@@ -58,8 +58,29 @@ ipcMain.handle('save-insight-providers-xml', async (event, newData) => {
 });
 
 
+ipcMain.handle('read-ai-languages-xml', async (event) => {
+  return new Promise((resolve, reject) => {
+    readXml(aiLanguagesXmlFilePath,(err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result); // Resolve with the parsed XML
+    });
+  });
+});
 
-
+ipcMain.handle('save-ai-languages-xml', async (event, newData) => {
+  return new Promise((resolve, reject) => {
+    writeXml(aiLanguagesXmlFilePath, newData, (writeErr) => {
+      if (writeErr) {
+        reject(writeErr);
+      } else {
+        resolve('XML updated successfully');
+      }
+    });
+  });
+});
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1), serve = args.some(val => val === '--serve');

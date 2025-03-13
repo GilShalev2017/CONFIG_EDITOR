@@ -36,3 +36,10 @@ export interface Provider {
   showFullText?: boolean;
   enabled?: boolean;
 }
+
+export interface Language
+{
+  englishName: string;
+  displayName: string;
+  isocode: string;
+}

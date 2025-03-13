@@ -26,6 +26,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableModule} from '@angular/material/table';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
@@ -73,6 +76,9 @@ import { AiProvidersComponent } from './ai-providers/ai-providers.component';
     MatStepperModule,
     MatCardModule,
     MatCheckboxModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatAutocompleteModule,
     
     FormsModule,
     ReactiveFormsModule,

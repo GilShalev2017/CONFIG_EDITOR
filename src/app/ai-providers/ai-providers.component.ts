@@ -1,9 +1,15 @@
-import { ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { JsonEditorOptions } from 'ang-jsoneditor';
 import { ElectronService } from '../core/services';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Provider } from '../models/model';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Language, Provider } from '../models/model';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { map, Observable, startWith } from 'rxjs';
+import { allLanguages } from './allLanguages';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-ai-providers',
@@ -12,30 +18,34 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   templateUrl: './ai-providers.component.html',
   styleUrl: './ai-providers.component.scss'
 })
-export class AiProvidersComponent implements OnInit{
+export class AiProvidersComponent implements OnInit {
 
-  public editorOptions: JsonEditorOptions;
-  public data: any;
-  
+  //providers fields
   transcriptionProviders: Provider[] = [];
   translationProviders: Provider[] = [];
   textAnalysisProviders: Provider[] = [];
   //faceDetectionProviders: Provider[] = [];
   otherProviders: Provider[] = [];
-
   providers: Provider[] = [];
-  
+  //stepper fields
   firstFormGroup = this._formBuilder.group({
-    // firstCtrl: ['', Validators.required],
   });
   secondFormGroup = this._formBuilder.group({
     secondCtrl: ['', Validators.required],
   });
   isLinear = true
-  
-  constructor(private electronService: ElectronService,private _formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
-    this.editorOptions = new JsonEditorOptions();
-    this.editorOptions.modes = ['tree'];//['code', 'text', 'tree', 'view']; // Set allowed modes
+  //languages fields  
+  selectedLanguage: Language | null = null; // Store selected language
+  languages: Language[] = []; //selected 
+  allLanguages: Language[] = allLanguages;
+  displayedColumns: string[] = ['englishName', 'displayName', 'isocode', 'actions'];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  languageControl = new FormControl('', Validators.required);
+  filteredLanguages: Observable<Language[]> = new Observable<Language[]>();
+  dataSource: MatTableDataSource<Language> = new MatTableDataSource<Language>();
+
+  constructor(private electronService: ElectronService, private _formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
   }
 
   submit() {
@@ -43,19 +53,32 @@ export class AiProvidersComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.loadXml();
+    this.loadInisghtProvidersXml();
+    this.loadAiLanguagesXml();
+
+    this.filteredLanguages = this.languageControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || ''))
+    );
   }
 
-  async loadXml() {
+  async loadAiLanguagesXml() {
+    const languagesObj = await this.electronService.ipcRenderer.invoke('read-ai-languages-xml');
+    const languagesArr = languagesObj['languages']['language'] || [];
+    this.languages = languagesArr.map((language: any) => ({
+      englishName: language.$?.englishName || '',
+      displayName: language.$?.displayName || '',
+      isocode: language.$?.isocode || ''
+    }));
+    this.dataSource.data = this.languages;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  async loadInisghtProvidersXml() {
     try {
       const xmlString = await this.electronService.ipcRenderer.invoke('read-insight-providers-xml');
-      console.log('XML loaded:', xmlString);
-  
-      const providersStr = xmlString['configuration']['aiProviders'];
       const providersArr = xmlString['configuration']['aiProviders'][0].provider;
-      const length = providersArr.length;
-  
-      // Define the array of Provider objects
       this.providers = providersArr.map((provider: any) => ({
         name: provider.$?.name || '', // Extract name from '$'
         displayName: provider.$?.displayname || '', // Extract displayname from '$'
@@ -69,7 +92,6 @@ export class AiProvidersComponent implements OnInit{
           sourceInsightType: insight.sourceInsightType || undefined,
           sourcedata: insight.sourcedata || undefined
         })),
-  
         // Varied properties
         modelType: provider.modelType || undefined,
         timeoutInMinutes: provider.timeoutInMinutes || undefined,
@@ -84,27 +106,24 @@ export class AiProvidersComponent implements OnInit{
         armvisubscriptionid: provider.armvisubscriptionid || undefined,
         armviresourcegroup: provider.armviresourcegroup || undefined,
         languagesUrl: provider.languagesUrl || undefined,
-
+        //ui fields
         showFullText: false,
         enabled: true
       }));
-  
-      console.log('Providers:', this.providers.length);
-  
+
       this.transcriptionProviders = this.providers.filter(p => p.name.includes('Transcriber'));
       this.translationProviders = this.providers.filter(p => p.name.includes('Translator'));
       this.textAnalysisProviders = this.providers.filter(p => p.name.includes('TextAnalysis'));
-      this.otherProviders = this.providers.filter(p => 
+      this.otherProviders = this.providers.filter(p =>
         !this.transcriptionProviders.includes(p) &&
         !this.translationProviders.includes(p) &&
         !this.textAnalysisProviders.includes(p)
       );
-      // Further logic to use providers array
     } catch (error) {
       console.error('Error loading XML:', error);
     }
   }
-  
+
   drop(event: CdkDragDrop<any[]>, type: string) {
     if (type === 'transcription') {
       moveItemInArray(this.transcriptionProviders, event.previousIndex, event.currentIndex);
@@ -115,20 +134,6 @@ export class AiProvidersComponent implements OnInit{
     } else if (type === 'others') {
       moveItemInArray(this.otherProviders, event.previousIndex, event.currentIndex);
     }
-  }
-  
-  async saveXml() {
-    try {
-      await this.electronService.ipcRenderer.invoke('save-insight-providers-xml', this.data); 
-      console.log('XML saved successfully');
-    } catch (error) {
-      console.error('Error saving XML:', error);
-    }
-  }
-
-  updateData(event: any) {
-    this.data = event; // Update this.data with the changed data
-    console.log("data changed: ", this.data);
   }
 
   getProviderIcon(providerName: string): string {
@@ -148,13 +153,59 @@ export class AiProvidersComponent implements OnInit{
 
   isDescriptionLong(provider: any): boolean {
     const description = String(provider.description ?? '');
-    console.log('Checking description:', description);
-    console.log('Description length:', description.length);
     return description.length > 100;
   }
-  
+
   toggleProvider(provider: any) {
     provider.enabled = !provider.enabled;
     this.cdr.detectChanges(); // Force update
+  }
+
+
+  private _filter(value: string | Language): Language[] {
+    let filterValue = '';
+
+    if (typeof value === 'string') {
+      filterValue = value.toLowerCase();
+    } else if (value && value.englishName) {
+      filterValue = value.englishName.toLowerCase();
+    }
+
+    return this.allLanguages.filter(option =>
+      option.englishName.toLowerCase().includes(filterValue) &&
+      !this.languages.some(lang => lang.isocode === option.isocode) // Exclude already selected
+    );
+  }
+
+  // Save the selected language for when the button is clicked
+  onLanguageSelected(event: MatAutocompleteSelectedEvent) {
+    const selectedName = event.option.value;
+    this.selectedLanguage = this.allLanguages.find(lang => lang.englishName === selectedName) || null;
+  }
+
+  addSelectedLanguage() {
+    if (this.selectedLanguage && !this.languages.some(lang => lang.isocode === this.selectedLanguage!.isocode)) {
+      this.languages.unshift(this.selectedLanguage);
+      this.languageControl.setValue(''); // Clear input after adding
+      this.selectedLanguage = null; // Reset selected language
+      this.dataSource.data = [...this.languages]; 
+    }
+  }
+
+  addLanguage(lang: Language) {
+    if (!this.languages.some(l => l.isocode === lang.isocode)) {
+      this.languages.unshift(lang); // Add to selected languages list
+      this.dataSource.data = [...this.languages]; // Refresh table data source
+    }
+    this.languageControl.setValue(''); // Clear input field
+  }
+
+  removeLanguage(lang: Language) {
+    this.languages = this.languages.filter(l => l.isocode !== lang.isocode); // Remove from selected list
+    this.dataSource.data = [...this.languages];
+  }
+
+  runTest() {
+
   }
 }
