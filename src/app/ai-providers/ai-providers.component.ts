@@ -10,6 +10,8 @@ import { MatSort } from '@angular/material/sort';
 import { map, Observable, startWith } from 'rxjs';
 import { allLanguages } from './allLanguages';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfigureProviderComponent } from '../congifure-provider/congifure-provider.component';
 
 @Component({
   selector: 'app-ai-providers',
@@ -45,7 +47,10 @@ export class AiProvidersComponent implements OnInit {
   filteredLanguages: Observable<Language[]> = new Observable<Language[]>();
   dataSource: MatTableDataSource<Language> = new MatTableDataSource<Language>();
 
-  constructor(private electronService: ElectronService, private _formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
+  constructor(private electronService: ElectronService, 
+              private _formBuilder: FormBuilder,
+              private cdr: ChangeDetectorRef,
+              private dialog: MatDialog) {
   }
 
   submit() {
@@ -205,7 +210,67 @@ export class AiProvidersComponent implements OnInit {
     this.dataSource.data = [...this.languages];
   }
 
-  runTest() {
+  editLanguage(language: any): void {
+    language.originalDisplayName = language.displayName; // Store original value
+    language.isEditing = true;
+    this.cdr.detectChanges();
+  }
+   
+  // saveLanguage(language: any): void {
+  //   language.isEditing = false;
+  //   // Update the model directly, in case you need to update it
+  //   const index = this.languages.findIndex(l => l.isocode === language.isocode);
+  //   if (index !== -1) {
+  //     this.languages[index] = { ...language }; // Update the language model
+  //   }
+  //   // You can add API call here to save the changes if needed
+  // }
 
+  saveLanguage(language: any): void {
+    if (!language.displayName.trim()) {
+      language.displayName = language.originalDisplayName;
+    }
+    language.isEditing = false;
+  
+    const updatedLanguages = this.languages.map(lang => {
+      if (lang.isocode === language.isocode) {
+        return { ...language };
+      }
+      return lang;
+    });
+  
+    this.languages = updatedLanguages;
+  
+    // Create a new MatTableDataSource instance
+    this.dataSource = new MatTableDataSource(this.languages);
+  
+    this.dataSource.paginator = this.paginator; // Re-assign paginator
+    this.dataSource.sort = this.sort; // Re-assign sort
+  
+    this.cdr.detectChanges();
+  }  
+  
+  cancelEdit(language: any): void {
+    language.displayName = language.originalDisplayName; // Revert changes
+    language.isEditing = false;
+    this.cdr.detectChanges();
+  }
+ 
+  configureProvider(provider: Provider)  {
+    const dialogRef = this.dialog.open(ConfigureProviderComponent, {
+      width: '400px',
+      data: { provider: { ...provider } } // Pass a copy
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Update the provider with the result
+        const index = this.providers.findIndex(p => p.name === result.name);
+        if (index !== -1) {
+          this.providers[index] = result;
+          this.loadInisghtProvidersXml();
+        }
+      }
+    });
   }
 }

@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>Configure {{ provider.displayName }}</h2>
+<mat-dialog-content [formGroup]="providerForm">
+  <mat-form-field appearance="outline">
+    <mat-label>API Internal Key</mat-label>
+    <input matInput formControlName="apiInternalKey" />
+  </mat-form-field>
+
+  <ng-container [ngSwitch]="providerType">
+    <ng-container *ngSwitchCase="'Whisper'">
+      <mat-form-field appearance="outline">
+        <mat-label>Model Type</mat-label>
+        <input matInput formControlName="modelType" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Timeout (Minutes)</mat-label>
+        <input matInput type="number" formControlName="timeoutInMinutes" />
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Azure'">
+      <mat-form-field appearance="outline">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="location" />
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'Speechmatix'">
+      <mat-form-field appearance="outline">
+        <mat-label>Service Type</mat-label>
+        <input matInput formControlName="serviceType" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>API Key</mat-label>
+        <input matInput formControlName="apiKey" />
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'AzureVideoIndexer'">
+      <mat-form-field appearance="outline">
+        <mat-label>Entra Client ID</mat-label>
+        <input matInput formControlName="entraclientid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Entra Tenant ID</mat-label>
+        <input matInput formControlName="entratenantid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>ARM VI Location</mat-label>
+        <input matInput formControlName="armvilocation" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>ARM VI Account Name</mat-label>
+        <input matInput formControlName="armviaccountname" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>ARM VI Account ID</mat-label>
+        <input matInput formControlName="armviaccountid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>ARM VI Subscription ID</mat-label>
+        <input matInput formControlName="armvisubscriptionid" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>ARM VI Resource Group</mat-label>
+        <input matInput formControlName="armviresourcegroup" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Languages URL</mat-label>
+        <input matInput formControlName="languagesUrl" />
+      </mat-form-field>
+    </ng-container>
+  </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onSave()">Save</button>
+</mat-dialog-actions>

@@ -8,6 +8,7 @@ export interface InsightType{
 export interface Provider {
   //Common to all providers
   name: string;
+  onPremise?:boolean;
   displayName: string;
   description?: string;
   cost: number;

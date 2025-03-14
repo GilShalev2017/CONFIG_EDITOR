@@ -29,6 +29,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableModule} from '@angular/material/table';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
@@ -41,6 +42,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
 
 import { JsonEditorComponent } from 'ang-jsoneditor'; // Import the component
 import { AiProvidersComponent } from './ai-providers/ai-providers.component';
+import { ConfigureProviderComponent } from './congifure-provider/congifure-provider.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,7 @@ import { AiProvidersComponent } from './ai-providers/ai-providers.component';
     DisplaySettingsComponent,
     NetworkSettingsComponent,
     AiProvidersComponent,
+    ConfigureProviderComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,7 +82,8 @@ import { AiProvidersComponent } from './ai-providers/ai-providers.component';
     MatPaginatorModule,
     MatTableModule,
     MatAutocompleteModule,
-    
+    MatDialogModule,
+
     FormsModule,
     ReactiveFormsModule,
     
