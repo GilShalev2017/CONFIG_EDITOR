@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>Configure {{ provider.displayName }}</h2>
 <mat-dialog-content [formGroup]="providerForm">
-  <mat-form-field appearance="outline">
+  <br>
+  <mat-form-field appearance="outline" class="full-width">
     <mat-label>API Internal Key</mat-label>
     <input matInput formControlName="apiInternalKey" />
   </mat-form-field>
@@ -73,5 +74,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary" (click)="onSave()">Save</button>
+  <button mat-button color="primary" (click)="onSave()">Test</button>
 </mat-dialog-actions>

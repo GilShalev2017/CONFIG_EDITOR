@@ -113,7 +113,8 @@ export class AiProvidersComponent implements OnInit {
         languagesUrl: provider.languagesUrl || undefined,
         //ui fields
         showFullText: false,
-        enabled: true
+        enabled:  provider.enabled || false,
+        testPass: provider.testPass || false
       }));
 
       this.transcriptionProviders = this.providers.filter(p => p.name.includes('Transcriber'));
@@ -162,7 +163,13 @@ export class AiProvidersComponent implements OnInit {
   }
 
   toggleProvider(provider: any) {
-    provider.enabled = !provider.enabled;
+    if(provider.enabled === false && provider.testPass === false)
+    {
+      this.configureProvider(provider);
+    }
+    else {
+      provider.enabled = !provider.enabled;
+    }
     this.cdr.detectChanges(); // Force update
   }
 
@@ -262,15 +269,46 @@ export class AiProvidersComponent implements OnInit {
       data: { provider: { ...provider } } // Pass a copy
     });
   
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result) {
         // Update the provider with the result
         const index = this.providers.findIndex(p => p.name === result.name);
         if (index !== -1) {
           this.providers[index] = result;
+          
+          try {
+            //const testResult = await this.electronService.ipcRenderer.invoke('test-provider', provider);
+            const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', provider);
+            //provider.testPass = Boolean(testResult); // Ensure it's a boolean
+            provider.testPass = Boolean(testConnectionResult); // Ensure it's a boolean
+          } catch (error) {
+            console.error('Error testing provider:', error);
+            provider.testPass = false;
+          }
+  
           this.loadInisghtProvidersXml();
+  
+          provider.enabled = provider.testPass;
+  
+          this.cdr.detectChanges();
         }
       }
     });
   }
+
+  async saveLanguages() {
+    const languagesData = this.dataSource?.data || this.languages;
+    if (!languagesData || languagesData.length === 0) {
+      console.error('No language data available to save.');
+      return;
+    }
+  
+    try {
+      const response = await this.electronService.ipcRenderer.invoke('save-ai-languages-xml', languagesData);
+      console.log(response);
+    } catch (error) {
+      console.error('Failed to save AI languages XML:', error);
+    }
+  }
+  
 }

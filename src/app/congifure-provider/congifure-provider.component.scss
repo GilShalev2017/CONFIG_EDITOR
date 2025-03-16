@@ -1,0 +1,23 @@
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 1em 0 1em 0;
+    top: 0.1em;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.dialog-content {
+    max-height: 70vh;
+    /* Adjust height to prevent content from being cut */
+    overflow: auto;
+    /* Ensure scrolling if needed */
+}
+
+.mat-form-field {
+    overflow: visible !important;
+}
+
+.mat-form-field-wrapper {
+    padding-top: 1.5em !important;
+}

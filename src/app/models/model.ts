@@ -36,6 +36,7 @@ export interface Provider {
   //FOR UI
   showFullText?: boolean;
   enabled?: boolean;
+  testPass?: boolean;
 }
 
 export interface Language

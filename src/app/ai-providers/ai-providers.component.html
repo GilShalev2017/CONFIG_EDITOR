@@ -37,7 +37,7 @@
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <button mat-button color="warn">Delete</button>
+                  <!-- <button mat-button color="warn">Delete</button> -->
                   <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
@@ -166,7 +166,7 @@
           <br>
 
           <div style="display: flex; align-items: center;">
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" >
               <mat-label>Select a Language</mat-label>
               <input matInput [formControl]="languageControl" [matAutocomplete]="auto" />
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onLanguageSelected($event)">
@@ -248,6 +248,7 @@
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button matStepperNext>Next</button>
+          <button mat-raised-button (click)="saveLanguages()" color="primary" style="float:right">Save Languages</button>
         </div>
       </form>
     </mat-step>
