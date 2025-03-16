@@ -37,10 +37,15 @@
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <!-- <button mat-button color="warn">Delete</button> -->
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)"
+                    (click)="toggleText(provider)">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
+                  <span style="flex-grow: 1;"></span>
+                  <mat-icon *ngIf="provider.onPremise; else cloudIcon" style="cursor: default;">home</mat-icon>
+                  <ng-template #cloudIcon>
+                    <mat-icon style="cursor: default;">cloud_queue</mat-icon>
+                  </ng-template>
                 </mat-card-actions>
               </mat-card>
             </div>
@@ -69,11 +74,16 @@
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
-                  <button mat-button color="primary">Configure</button>
-                  <button mat-button color="warn">Delete</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
+                  <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)"
+                    (click)="toggleText(provider)">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
+                  <span style="flex-grow: 1;"></span>
+                  <mat-icon *ngIf="provider.onPremise; else cloudIcon" style="cursor: default;">home</mat-icon>
+                  <ng-template #cloudIcon>
+                    <mat-icon style="cursor: default;">cloud_queue</mat-icon>
+                  </ng-template>
                 </mat-card-actions>
               </mat-card>
             </div>
@@ -103,11 +113,16 @@
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
-                  <button mat-button color="primary">Configure</button>
-                  <button mat-button color="warn">Delete</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
+                  <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)"
+                    (click)="toggleText(provider)">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
+                  <span style="flex-grow: 1;"></span>
+                  <mat-icon *ngIf="provider.onPremise; else cloudIcon" style="cursor: default;">home</mat-icon>
+                  <ng-template #cloudIcon>
+                    <mat-icon style="cursor: default;">cloud_queue</mat-icon>
+                  </ng-template>
                 </mat-card-actions>
               </mat-card>
             </div>
@@ -138,12 +153,16 @@
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
-                  <button mat-button color="primary">Configure</button>
-                  <button mat-button color="warn">Delete</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
+                  <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)"
+                    (click)="toggleText(provider)">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
-
+                  <span style="flex-grow: 1;"></span>
+                  <mat-icon *ngIf="provider.onPremise; else cloudIcon" style="cursor: default;">home</mat-icon>
+                  <ng-template #cloudIcon>
+                    <mat-icon style="cursor: default;">cloud_queue</mat-icon>
+                  </ng-template>
                 </mat-card-actions>
               </mat-card>
             </div>

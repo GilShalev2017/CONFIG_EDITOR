@@ -91,6 +91,7 @@ export class AiProvidersComponent implements OnInit {
         cost: provider.cost,
         apiUrl: provider.apiUrl || undefined,
         apiInternalKey: provider.apiInternalKey,
+        onPremise: provider.onPremise && provider.onPremise[0] === 'true',
         insightTypes: (provider.insightTypes || []).map((insight: any) => ({
           name: insight.name,
           displayName: insight.displayName,
@@ -125,6 +126,7 @@ export class AiProvidersComponent implements OnInit {
         !this.translationProviders.includes(p) &&
         !this.textAnalysisProviders.includes(p)
       );
+      console.log(this.transcriptionProviders);
     } catch (error) {
       console.error('Error loading XML:', error);
     }
