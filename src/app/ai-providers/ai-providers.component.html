@@ -9,42 +9,44 @@
         <br>
         <div class="providers-container">
           <div class="column">
-
             <mat-icon>audiotrack</mat-icon>
             <mat-icon>mic_none</mat-icon>
             <mat-icon>headset_mic</mat-icon>
             <mat-icon>perm_camera_mic</mat-icon>
             <h3>Transcribers</h3>
-
             <div cdkDropList (cdkDropListDropped)="drop($event, 'transcription')">
-              <mat-card *ngFor="let provider of transcriptionProviders" cdkDrag
-                [ngClass]="{'disabled-card': !provider.enabled}">
-                <mat-card-header>
+              <mat-card *ngFor="let provider of transcriptionProviders" cdkDrag>
+                <mat-card-header [ngClass]="{'disabled-card': !provider.enabled}">
                   <div mat-card-avatar>
                     <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
                       height="40">
                   </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
-                  <div class="checkbox-container">
+                  <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
                     <mat-checkbox [checked]="provider.enabled" color="primary"
                       (change)="toggleProvider(provider)"></mat-checkbox>
                   </div>
                 </mat-card-header>
-                <mat-card-content
+                <mat-card-content [ngClass]="{'disabled-card': !provider.enabled}"
                   [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
                   <p>{{ provider.description }}</p>
                 </mat-card-content>
                 <mat-card-actions>
-                  <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)"
-                    (click)="toggleText(provider)">
+                  <button mat-button color="primary" (click)="configureProvider(provider)"
+                    class="configure-all-time-button"
+                    style="opacity: 1 !important; pointer-events: auto; filter: none !important;">Configure</button>
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)"
+                    [ngClass]="{'disabled-card': !provider.enabled}">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
+
                   </button>
                   <span style="flex-grow: 1;"></span>
-                  <mat-icon *ngIf="provider.onPremise; else cloudIcon" style="cursor: default;">home</mat-icon>
+                  <mat-icon *ngIf="provider.onPremise; else cloudIcon" style="cursor: default;"
+                    [ngClass]="{'disabled-card': !provider.enabled}">home</mat-icon>
                   <ng-template #cloudIcon>
-                    <mat-icon style="cursor: default;">cloud_queue</mat-icon>
+                    <mat-icon style="cursor: default;"
+                      [ngClass]="{'disabled-card': !provider.enabled}">cloud_queue</mat-icon>
                   </ng-template>
                 </mat-card-actions>
               </mat-card>
@@ -75,8 +77,7 @@
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)"
-                    (click)="toggleText(provider)">
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
                   <span style="flex-grow: 1;"></span>
@@ -114,8 +115,7 @@
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)"
-                    (click)="toggleText(provider)">
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
                   <span style="flex-grow: 1;"></span>
@@ -154,8 +154,7 @@
                 </mat-card-content>
                 <mat-card-actions>
                   <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)"
-                    (click)="toggleText(provider)">
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
                   <span style="flex-grow: 1;"></span>
@@ -168,7 +167,6 @@
             </div>
           </div>
         </div>
-
         <div>
           <button mat-button matStepperNext>Next</button>
         </div>
@@ -183,9 +181,8 @@
           </mat-card-title>
           <mat-card-subtitle><i>To add more languages, select one from the dropdown list.</i></mat-card-subtitle>
           <br>
-
           <div style="display: flex; align-items: center;">
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Select a Language</mat-label>
               <input matInput [formControl]="languageControl" [matAutocomplete]="auto" />
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onLanguageSelected($event)">
@@ -194,24 +191,17 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-          
-            <button 
-              mat-raised-button 
-              color="primary" 
-              style="margin-left: 10px; margin-top: -24px;"
+            <button mat-raised-button color="primary" style="margin-left: 10px; margin-top: -24px;"
               (click)="addSelectedLanguage()">
               Add
             </button>
           </div>
-
           <div class="table-container">
             <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
               <ng-container matColumnDef="englishName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> English Name </th>
                 <td mat-cell *matCellDef="let language"> {{ language.englishName }} </td>
               </ng-container>
-
               <ng-container matColumnDef="displayName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Display Name </th>
                 <td mat-cell *matCellDef="let language">
@@ -226,10 +216,7 @@
                   <ng-template #editMode>
                     <div style="display: flex; align-items: center; gap: 8px;">
                       <mat-form-field appearance="outline" style="width: 120px; max-height: 36px;">
-                        <input 
-                          matInput 
-                          [(ngModel)]="language.displayName"
-                          [value]="language.displayName || ''"
+                        <input matInput [(ngModel)]="language.displayName" [value]="language.displayName || ''"
                           style="height: 36px; padding: 4px 8px; line-height: normal;">
                       </mat-form-field>
                       <button mat-icon-button color="primary" (click)="saveLanguage(language)">
@@ -240,14 +227,11 @@
                       </button>
                     </div>
                   </ng-template>
-                  
               </ng-container>
-              
               <ng-container matColumnDef="isocode">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> ISO Code </th>
                 <td mat-cell *matCellDef="let language"> {{ language.isocode }} </td>
               </ng-container>
-
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                 <td mat-cell *matCellDef="let lang">
@@ -256,22 +240,19 @@
                   </button>
                 </td>
               </ng-container>
-
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
           </div>
         </mat-card>
-
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button matStepperNext>Next</button>
-          <button mat-raised-button (click)="saveLanguages()" color="primary" style="float:right">Save Languages</button>
+          <button mat-raised-button (click)="saveLanguages()" color="primary" style="float:right">Save
+            Languages</button>
         </div>
       </form>
     </mat-step>
   </mat-stepper>
 </div>
-
-<!-- cloud_queue -->

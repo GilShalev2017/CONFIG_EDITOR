@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { JsonEditorOptions } from 'ang-jsoneditor';
 import { ElectronService } from '../core/services';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Language, Provider } from '../models/model';
@@ -16,12 +15,10 @@ import { ConfigureProviderComponent } from '../congifure-provider/congifure-prov
 @Component({
   selector: 'app-ai-providers',
   standalone: false,
-  // imports: [],
   templateUrl: './ai-providers.component.html',
   styleUrl: './ai-providers.component.scss'
 })
 export class AiProvidersComponent implements OnInit {
-
   //providers fields
   transcriptionProviders: Provider[] = [];
   translationProviders: Provider[] = [];
@@ -53,14 +50,9 @@ export class AiProvidersComponent implements OnInit {
               private dialog: MatDialog) {
   }
 
-  submit() {
-    throw new Error('Method not implemented.');
-  }
-
   ngOnInit(): void {
     this.loadInisghtProvidersXml();
     this.loadAiLanguagesXml();
-
     this.filteredLanguages = this.languageControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || ''))
@@ -165,26 +157,25 @@ export class AiProvidersComponent implements OnInit {
   }
 
   toggleProvider(provider: any) {
-    if(provider.enabled === false && provider.testPass === false)
-    {
-      this.configureProvider(provider);
-    }
-    else {
+    // if(provider.enabled === false && provider.testPass === false)
+    // {
+    //   this.configureProvider(provider);
+    // }
+    // else {
       provider.enabled = !provider.enabled;
-    }
+    // }
+   
     this.cdr.detectChanges(); // Force update
   }
 
 
   private _filter(value: string | Language): Language[] {
     let filterValue = '';
-
     if (typeof value === 'string') {
       filterValue = value.toLowerCase();
     } else if (value && value.englishName) {
       filterValue = value.englishName.toLowerCase();
     }
-
     return this.allLanguages.filter(option =>
       option.englishName.toLowerCase().includes(filterValue) &&
       !this.languages.some(lang => lang.isocode === option.isocode) // Exclude already selected
@@ -224,38 +215,23 @@ export class AiProvidersComponent implements OnInit {
     language.isEditing = true;
     this.cdr.detectChanges();
   }
-   
-  // saveLanguage(language: any): void {
-  //   language.isEditing = false;
-  //   // Update the model directly, in case you need to update it
-  //   const index = this.languages.findIndex(l => l.isocode === language.isocode);
-  //   if (index !== -1) {
-  //     this.languages[index] = { ...language }; // Update the language model
-  //   }
-  //   // You can add API call here to save the changes if needed
-  // }
 
   saveLanguage(language: any): void {
     if (!language.displayName.trim()) {
       language.displayName = language.originalDisplayName;
     }
     language.isEditing = false;
-  
     const updatedLanguages = this.languages.map(lang => {
       if (lang.isocode === language.isocode) {
         return { ...language };
       }
       return lang;
     });
-  
     this.languages = updatedLanguages;
-  
     // Create a new MatTableDataSource instance
     this.dataSource = new MatTableDataSource(this.languages);
-  
     this.dataSource.paginator = this.paginator; // Re-assign paginator
     this.dataSource.sort = this.sort; // Re-assign sort
-  
     this.cdr.detectChanges();
   }  
   
@@ -277,7 +253,6 @@ export class AiProvidersComponent implements OnInit {
         const index = this.providers.findIndex(p => p.name === result.name);
         if (index !== -1) {
           this.providers[index] = result;
-          
           try {
             //const testResult = await this.electronService.ipcRenderer.invoke('test-provider', provider);
             const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', provider);
@@ -287,16 +262,52 @@ export class AiProvidersComponent implements OnInit {
             console.error('Error testing provider:', error);
             provider.testPass = false;
           }
-  
-          this.loadInisghtProvidersXml();
-  
+          // this.loadInisghtProvidersXml();
           provider.enabled = provider.testPass;
-  
           this.cdr.detectChanges();
         }
       }
     });
   }
+
+  //configureProvider(provider: Provider) {
+    // const dialogRef = this.dialog.open(ConfigureProviderComponent, {
+    //   width: '400px',
+    //   data: { provider: { ...provider } }
+    // });
+  
+    // dialogRef.afterClosed().subscribe(async result => {
+    //   if (result) {
+    //     const index = this.providers.findIndex(p => p.name === result.name);
+    //     if (index !== -1) {
+    //       // Update the provider with the dialog result
+    //       this.providers[index] = result;
+    //       const currentProvider = this.providers[index];
+  
+    //       // Immediately disable the provider and update the UI
+    //       currentProvider.enabled = false;
+    //       this.cdr.detectChanges();
+  
+    //       // try {
+    //       //   const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', currentProvider);
+    //       //   currentProvider.testPass = Boolean(testConnectionResult);
+    //       //   currentProvider.enabled = currentProvider.testPass;
+  
+    //       // } catch (error) {
+    //       //   console.error('Error testing provider:', error);
+    //       //   currentProvider.testPass = false;
+    //       //   currentProvider.enabled = false;
+    //       // }
+  
+    //       currentProvider.testPass = true;
+    //       currentProvider.enabled = true;
+
+    //       // Manually trigger change detection after updating the provider
+    //       this.cdr.detectChanges();
+    //     }
+    //   }
+    // });
+  //}
 
   async saveLanguages() {
     const languagesData = this.dataSource?.data || this.languages;
@@ -312,5 +323,4 @@ export class AiProvidersComponent implements OnInit {
       console.error('Failed to save AI languages XML:', error);
     }
   }
-  
 }

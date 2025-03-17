@@ -125,6 +125,11 @@ mat-card-header {
   pointer-events: all; /* Allow checkbox to remain clickable */
 }
 
+.disabled-card .configure-all-time-button {
+  opacity: 1 !important; 
+  pointer-events: auto; 
+  filter: none !important;
+}
 
 mat-form-field {
   width: 300px;
@@ -158,4 +163,22 @@ input.mat-input-element {
   margin: 0;
   padding: 0;
   height: 36px !important;
+}
+
+
+
+.disabled-card-content {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: grayscale(80%);
+}
+
+.disabled-card-actions {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: grayscale(80%);
+}
+
+.disabled-card-content p {
+  opacity: 1; /* override p tag opacity */
 }
