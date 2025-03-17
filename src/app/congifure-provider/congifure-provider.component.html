@@ -19,6 +19,7 @@
       <mat-form-field appearance="outline" class="full-width" style="margin-top: 10px;">
         <mat-label>API Url</mat-label>
         <input matInput formControlName="apiUrl" />
+        <mat-hint>Replace only the IP address with the Whisper server's IP, typically the GPU-equipped server. Keep all the rest</mat-hint>
       </mat-form-field>
     </ng-container>
 
@@ -53,6 +54,7 @@
       <mat-form-field *ngIf="providerForm.get('serviceType')?.value !== 'cloud'" appearance="outline" class="full-width" style="margin-top: 10px;">
         <mat-label>API Url</mat-label>
         <input matInput formControlName="apiUrl" />
+        <mat-hint>Replace only the IP address with the SpeechMatix server's IP, typically the GPU-equipped server. Keep all the rest.</mat-hint>
       </mat-form-field>
 
     </ng-container>
