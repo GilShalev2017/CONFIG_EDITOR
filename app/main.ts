@@ -234,6 +234,130 @@ ipcMain.handle('test-provider-connection', async (event, provider) => {
   }
 });
 
+ipcMain.handle('save-provider-configuration', async (event, provider) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(insightProvidersXmlFilePath, 'utf8', (readErr, xmlData) => {
+      if (readErr) {
+        reject(readErr);
+        return;
+      }
+
+      xml2js.parseString(xmlData, (parseErr, result) => {
+        if (parseErr) {
+          reject(parseErr);
+          return;
+        }
+
+        const providers = result.configuration.aiProviders[0].provider;
+        const providerToUpdateIndex = providers.findIndex((p: any) => p.$.name === provider.name);
+
+        if (providerToUpdateIndex === -1) {
+          reject(new Error(`Provider with name ${provider.name} not found.`));
+          return;
+        }
+
+        const providerToUpdate = providers[providerToUpdateIndex];
+
+        // Update provider fields
+        providerToUpdate.enabled = [String(provider.enabled)];
+        providerToUpdate.testPass = [String(provider.testPass)];
+
+        console.log(result); // Inspect the parsed object
+
+        // Update other relevant fields if they exist in the provider object and xml.
+        // if (provider.displayName !== null) {
+        //   providerToUpdate.displayname = [provider.displayName];
+        // }
+
+        // if (provider.description !== null) {
+        //   providerToUpdate.description = [provider.description];
+        // }
+
+        // if (provider.cost !== null) {
+        //   providerToUpdate.cost = [String(provider.cost)];
+        // }
+
+        // if (provider.apiUrl !== null) {
+        //   providerToUpdate.apiUrl = [provider.apiUrl];
+        // }
+
+        // if (provider.apiInternalKey !== null) {
+        //   providerToUpdate.apiInternalKey = [provider.apiInternalKey];
+        // }
+
+        // if (provider.onPremise !== null) {
+        //   providerToUpdate.onPremise = [String(provider.onPremise)];
+        // }
+
+        // if (provider.modelType !== null) {
+        //     providerToUpdate.modelType = [provider.modelType];
+        // }
+
+        // if (provider.timeoutInMinutes !== null) {
+        //     providerToUpdate.timeoutInMinutes = [String(provider.timeoutInMinutes)];
+        // }
+
+        // if (provider.location !== null) {
+        //     providerToUpdate.location = [provider.location];
+        // }
+
+        // if (provider.serviceType !== null) {
+        //     providerToUpdate.serviceType = [provider.serviceType];
+        // }
+
+        // if (provider.apiKey !== null) {
+        //     providerToUpdate.apiKey = [provider.apiKey];
+        // }
+
+        // if (provider.entraclientid !== null) {
+        //     providerToUpdate.entraclientid = [provider.entraclientid];
+        // }
+
+        // if (provider.entratenantid !== null) {
+        //     providerToUpdate.entratenantid = [provider.entratenantid];
+        // }
+
+        // if (provider.armvilocation !== null) {
+        //     providerToUpdate.armvilocation = [provider.armvilocation];
+        // }
+
+        // if (provider.armviaccountname !== null) {
+        //     providerToUpdate.armviaccountname = [provider.armviaccountname];
+        // }
+
+        // if (provider.armviaccountid !== null) {
+        //     providerToUpdate.armviaccountid = [provider.armviaccountid];
+        // }
+
+        // if (provider.armvisubscriptionid !== null) {
+        //     providerToUpdate.armvisubscriptionid = [provider.armvisubscriptionid];
+        // }
+
+        // if (provider.armviresourcegroup !== null) {
+        //     providerToUpdate.armviresourcegroup = [provider.armviresourcegroup];
+        // }
+
+        // if (provider.languagesUrl !== null) {
+        //     providerToUpdate.languagesUrl = [provider.languagesUrl];
+        // }
+
+        const builder = new xml2js.Builder();
+
+        const updatedXml = builder.buildObject(result);
+
+        fs.writeFile(insightProvidersXmlFilePath, updatedXml, 'utf8', (writeErr) => {
+          if (writeErr) {
+            reject(writeErr);
+          } else {
+            resolve('Provider configuration updated successfully');
+          }
+        });
+      });
+    });
+  });
+});
+
+
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1), serve = args.some(val => val === '--serve');
 

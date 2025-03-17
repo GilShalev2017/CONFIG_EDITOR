@@ -39,6 +39,9 @@ export class ConfigureProviderComponent implements OnInit {
       armvisubscriptionid: [this.provider.armvisubscriptionid],
       armviresourcegroup: [this.provider.armviresourcegroup],
       languagesUrl: [this.provider.languagesUrl],
+
+      enabled: [this.provider.enabled],
+      testPass: [this.provider.testPass],
     });
   }
 
@@ -70,10 +73,10 @@ export class ConfigureProviderComponent implements OnInit {
       try {
         const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', providerData);
         this.testPassed = Boolean(testConnectionResult);
-        this.testMessage = this.testPassed ? 'Connection successful!' : 'Connection failed.';
+        this.testMessage = this.testPassed ? 'Verified' : 'Not Verified';
       } catch (error) {
         console.error('Error testing provider:', error);
-        this.testMessage = 'Error testing connection.';
+        this.testMessage = 'Not Verified';
         this.testPassed = false;
       } finally {
         this.isTesting = false;
@@ -81,9 +84,18 @@ export class ConfigureProviderComponent implements OnInit {
     }
   }
 
-  onSaveAndEnable(): void {
+  async onSaveAndEnable(): Promise<void> {
     if (this.testPassed) {
-      this.dialogRef.close({ ...this.provider, ...this.providerForm.value, enabled: true, testPass: true });
+      const providerData = { ...this.provider, ...this.providerForm.value };
+      try {
+        providerData.enabled = true;
+        providerData.testPass = true;
+        await this.electronService.ipcRenderer.invoke('save-provider-configuration', providerData);
+        this.dialogRef.close({ ...this.provider, ...this.providerForm.value, enabled: true, testPass: true });
+      } catch (error) {
+        console.error('Error saving provider configuration:', error);
+        // Display an error message to the user
+      }
     }
   }
 

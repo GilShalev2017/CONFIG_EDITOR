@@ -72,44 +72,176 @@ export class AiProvidersComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
+  // async loadInisghtProvidersXml() {
+  //   try {
+  //     const xmlString = await this.electronService.ipcRenderer.invoke('read-insight-providers-xml');
+  //     const providersArr = xmlString['configuration']['aiProviders'][0].provider;
+  //     this.providers = providersArr.map((provider: any) => ({
+  //       name: provider.$?.name || '', // Extract name from '$'
+  //       displayName: provider.$?.displayname || '', // Extract displayname from '$'
+  //       description: provider.description || undefined,
+  //       cost: provider.cost,
+  //       apiUrl: provider.apiUrl || undefined,
+  //       apiInternalKey: provider.apiInternalKey,
+  //       onPremise: provider.onPremise && provider.onPremise[0] === 'true',
+  //       insightTypes: (provider.insightTypes || []).map((insight: any) => ({
+  //         name: insight.name,
+  //         displayName: insight.displayName,
+  //         sourceInsightType: insight.sourceInsightType || undefined,
+  //         sourcedata: insight.sourcedata || undefined
+  //       })),
+  //       // Varied properties
+  //       modelType: provider.modelType || undefined,
+  //       timeoutInMinutes: provider.timeoutInMinutes || undefined,
+  //       location: provider.location || undefined,
+  //       serviceType: provider.serviceType || undefined,
+  //       apiKey: provider.apiKey || undefined,
+  //       entraclientid: provider.entraclientid || undefined,
+  //       entratenantid: provider.entratenantid || undefined,
+  //       armvilocation: provider.armvilocation || undefined,
+  //       armviaccountname: provider.armviaccountname || undefined,
+  //       armviaccountid: provider.armviaccountid || undefined,
+  //       armvisubscriptionid: provider.armvisubscriptionid || undefined,
+  //       armviresourcegroup: provider.armviresourcegroup || undefined,
+  //       languagesUrl: provider.languagesUrl || undefined,
+  //       //ui fields
+  //       showFullText: false,
+  //       enabled:  provider.enabled || false,
+  //       testPass: provider.testPass || false
+  //     }));
+
+      
+
+  //     this.transcriptionProviders = this.providers.filter(p => p.name.includes('Transcriber'));
+  //     this.translationProviders = this.providers.filter(p => p.name.includes('Translator'));
+  //     this.textAnalysisProviders = this.providers.filter(p => p.name.includes('TextAnalysis'));
+  //     this.otherProviders = this.providers.filter(p =>
+  //       !this.transcriptionProviders.includes(p) &&
+  //       !this.translationProviders.includes(p) &&
+  //       !this.textAnalysisProviders.includes(p)
+  //     );
+  //     console.log(this.transcriptionProviders);
+  //   } catch (error) {
+  //     console.error('Error loading XML:', error);
+  //   }
+  // }
+
+  // async loadInisghtProvidersXml() {
+  //   try {
+  //     const xmlString = await this.electronService.ipcRenderer.invoke('read-insight-providers-xml');
+  //     const providersArr = xmlString['configuration']['aiProviders'][0].provider;
+  //     this.providers = providersArr.map((provider: any) => {
+  //       let enabled = provider.enabled || false;
+  //       let testPass = provider.testPass || false;
+  
+  //       if (provider.$?.name === 'actusCCTranscriber') {
+  //         enabled = true;
+  //         testPass = true;
+  //       }
+  
+  //       return {
+  //         name: provider.$?.name || '',
+  //         displayName: provider.$?.displayname || '',
+  //         description: provider.description || undefined,
+  //         cost: provider.cost,
+  //         apiUrl: provider.apiUrl || undefined,
+  //         apiInternalKey: provider.apiInternalKey,
+  //         onPremise: provider.onPremise && provider.onPremise[0] === 'true',
+  //         insightTypes: (provider.insightTypes || []).map((insight: any) => ({
+  //           name: insight.name,
+  //           displayName: insight.displayName,
+  //           sourceInsightType: insight.sourceInsightType || undefined,
+  //           sourcedata: insight.sourcedata || undefined
+  //         })),
+  //         modelType: provider.modelType || undefined,
+  //         timeoutInMinutes: provider.timeoutInMinutes || undefined,
+  //         location: provider.location || undefined,
+  //         serviceType: provider.serviceType || undefined,
+  //         apiKey: provider.apiKey || undefined,
+  //         entraclientid: provider.entraclientid || undefined,
+  //         entratenantid: provider.entratenantid || undefined,
+  //         armvilocation: provider.armvilocation || undefined,
+  //         armviaccountname: provider.armviaccountname || undefined,
+  //         armviaccountid: provider.armviaccountid || undefined,
+  //         armvisubscriptionid: provider.armvisubscriptionid || undefined,
+  //         armviresourcegroup: provider.armviresourcegroup || undefined,
+  //         languagesUrl: provider.languagesUrl || undefined,
+  //         showFullText: false,
+  //         enabled: provider.enabled,
+  //         testPass: provider.testPass
+  //       };
+  //     });
+  
+  //     this.transcriptionProviders = this.providers.filter(p => p.name.includes('Transcriber'));
+  //     this.translationProviders = this.providers.filter(p => p.name.includes('Translator'));
+  //     this.textAnalysisProviders = this.providers.filter(p => p.name.includes('TextAnalysis'));
+  //     this.otherProviders = this.providers.filter(p =>
+  //       !this.transcriptionProviders.includes(p) &&
+  //       !this.translationProviders.includes(p) &&
+  //       !this.textAnalysisProviders.includes(p)
+  //     );
+  //     console.log(this.transcriptionProviders);
+  //   } catch (error) {
+  //     console.error('Error loading XML:', error);
+  //   }
+  // }
+  
   async loadInisghtProvidersXml() {
     try {
       const xmlString = await this.electronService.ipcRenderer.invoke('read-insight-providers-xml');
       const providersArr = xmlString['configuration']['aiProviders'][0].provider;
-      this.providers = providersArr.map((provider: any) => ({
-        name: provider.$?.name || '', // Extract name from '$'
-        displayName: provider.$?.displayname || '', // Extract displayname from '$'
-        description: provider.description || undefined,
-        cost: provider.cost,
-        apiUrl: provider.apiUrl || undefined,
-        apiInternalKey: provider.apiInternalKey,
-        onPremise: provider.onPremise && provider.onPremise[0] === 'true',
-        insightTypes: (provider.insightTypes || []).map((insight: any) => ({
-          name: insight.name,
-          displayName: insight.displayName,
-          sourceInsightType: insight.sourceInsightType || undefined,
-          sourcedata: insight.sourcedata || undefined
-        })),
-        // Varied properties
-        modelType: provider.modelType || undefined,
-        timeoutInMinutes: provider.timeoutInMinutes || undefined,
-        location: provider.location || undefined,
-        serviceType: provider.serviceType || undefined,
-        apiKey: provider.apiKey || undefined,
-        entraclientid: provider.entraclientid || undefined,
-        entratenantid: provider.entratenantid || undefined,
-        armvilocation: provider.armvilocation || undefined,
-        armviaccountname: provider.armviaccountname || undefined,
-        armviaccountid: provider.armviaccountid || undefined,
-        armvisubscriptionid: provider.armvisubscriptionid || undefined,
-        armviresourcegroup: provider.armviresourcegroup || undefined,
-        languagesUrl: provider.languagesUrl || undefined,
-        //ui fields
-        showFullText: false,
-        enabled:  provider.enabled || false,
-        testPass: provider.testPass || false
-      }));
-
+      this.providers = providersArr.map((provider: any) => {
+        let enabled = false; // Default to false
+        let testPass = false; // Default to false
+  
+        // Handle 'enabled' array
+        if (provider.enabled && Array.isArray(provider.enabled) && provider.enabled.length > 0) {
+          enabled = provider.enabled[0] === 'true';
+        }
+  
+        // Handle 'testPass' array
+        if (provider.testPass && Array.isArray(provider.testPass) && provider.testPass.length > 0) {
+          testPass = provider.testPass[0] === 'true';
+        }
+  
+        if (provider.$?.name === 'actusCCTranscriber') {
+          enabled = true;
+          testPass = true;
+        }
+  
+        return {
+          name: provider.$?.name || '',
+          displayName: provider.$?.displayname || '',
+          description: provider.description || undefined,
+          cost: provider.cost,
+          apiUrl: provider.apiUrl || undefined,
+          apiInternalKey: provider.apiInternalKey,
+          onPremise: provider.onPremise && provider.onPremise[0] === 'true',
+          insightTypes: (provider.insightTypes || []).map((insight: any) => ({
+            name: insight.name,
+            displayName: insight.displayName,
+            sourceInsightType: insight.sourceInsightType || undefined,
+            sourcedata: insight.sourcedata || undefined
+          })),
+          modelType: provider.modelType || undefined,
+          timeoutInMinutes: provider.timeoutInMinutes || undefined,
+          location: provider.location || undefined,
+          serviceType: provider.serviceType || undefined,
+          apiKey: provider.apiKey || undefined,
+          entraclientid: provider.entraclientid || undefined,
+          entratenantid: provider.entratenantid || undefined,
+          armvilocation: provider.armvilocation || undefined,
+          armviaccountname: provider.armviaccountname || undefined,
+          armviaccountid: provider.armviaccountid || undefined,
+          armvisubscriptionid: provider.armvisubscriptionid || undefined,
+          armviresourcegroup: provider.armviresourcegroup || undefined,
+          languagesUrl: provider.languagesUrl || undefined,
+          showFullText: false,
+          enabled: enabled,
+          testPass: testPass
+        };
+      });
+  
       this.transcriptionProviders = this.providers.filter(p => p.name.includes('Transcriber'));
       this.translationProviders = this.providers.filter(p => p.name.includes('Translator'));
       this.textAnalysisProviders = this.providers.filter(p => p.name.includes('TextAnalysis'));
@@ -247,27 +379,40 @@ export class AiProvidersComponent implements OnInit {
       data: { provider: { ...provider } } // Pass a copy
     });
   
-    dialogRef.afterClosed().subscribe(async result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Update the provider with the result
+        // Update the provider with the result directly
         const index = this.providers.findIndex(p => p.name === result.name);
         if (index !== -1) {
-          this.providers[index] = result;
-          try {
-            //const testResult = await this.electronService.ipcRenderer.invoke('test-provider', provider);
-            const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', provider);
-            //provider.testPass = Boolean(testResult); // Ensure it's a boolean
-            provider.testPass = Boolean(testConnectionResult); // Ensure it's a boolean
-          } catch (error) {
-            console.error('Error testing provider:', error);
-            provider.testPass = false;
-          }
-          // this.loadInisghtProvidersXml();
-          provider.enabled = provider.testPass;
-          this.cdr.detectChanges();
+          this.providers[index] = result; // Replace the provider with the updated result
+          provider.enabled = result.enabled;
+          provider.testPass = result.testPass;
+          this.cdr.detectChanges(); // Trigger change detection
         }
       }
     });
+
+    // dialogRef.afterClosed().subscribe(async result => {
+    //   if (result) {
+    //     // Update the provider with the result
+    //     const index = this.providers.findIndex(p => p.name === result.name);
+    //     if (index !== -1) {
+    //       this.providers[index] = result;
+    //       try {
+    //         //const testResult = await this.electronService.ipcRenderer.invoke('test-provider', provider);
+    //         const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', provider);
+    //         //provider.testPass = Boolean(testResult); // Ensure it's a boolean
+    //         provider.testPass = Boolean(testConnectionResult); // Ensure it's a boolean
+    //       } catch (error) {
+    //         console.error('Error testing provider:', error);
+    //         provider.testPass = false;
+    //       }
+    //       // this.loadInisghtProvidersXml();
+    //       provider.enabled = provider.testPass;
+    //       this.cdr.detectChanges();
+    //     }
+    //   }
+    // });
   }
 
   //configureProvider(provider: Provider) {

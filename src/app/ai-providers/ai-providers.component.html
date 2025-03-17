@@ -24,7 +24,7 @@
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                   <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
-                    <mat-checkbox [checked]="provider.enabled" color="primary"
+                    <mat-checkbox [checked]="provider.enabled" color="primary" [disabled]="!provider.enabled"
                       (change)="toggleProvider(provider)"></mat-checkbox>
                   </div>
                 </mat-card-header>
@@ -35,11 +35,11 @@
                 <mat-card-actions>
                   <button mat-button color="primary" (click)="configureProvider(provider)"
                     class="configure-all-time-button"
-                    style="opacity: 1 !important; pointer-events: auto; filter: none !important;">Configure</button>
+                    style="opacity: 1 !important; pointer-events: auto; filter: none !important;"
+                    *ngIf="provider.name !== 'actusCCTranscriber'">Configure</button>
                   <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)"
                     [ngClass]="{'disabled-card': !provider.enabled}">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
-
                   </button>
                   <span style="flex-grow: 1;"></span>
                   <mat-icon *ngIf="provider.onPremise; else cloudIcon" style="cursor: default;"
@@ -57,27 +57,30 @@
             <mat-icon>text_rotation_none</mat-icon>
             <h3>Translators</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'translation')">
-              <mat-card *ngFor="let provider of translationProviders" cdkDrag
-                [ngClass]="{'disabled-card': !provider.enabled}">
-                <mat-card-header>
+              <mat-card *ngFor="let provider of translationProviders" cdkDrag>
+                <mat-card-header [ngClass]="{'disabled-card': !provider.enabled}">
                   <div mat-card-avatar>
                     <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
                       height="40">
                   </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
-                  <div class="checkbox-container">
-                    <mat-checkbox [checked]="provider.enabled" color="primary"
-                      (change)="toggleProvider(provider)"></mat-checkbox>
+                  <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
+                    <mat-checkbox [checked]="provider.enabled" color="primary" (change)="toggleProvider(provider)"
+                      [disabled]="!provider.enabled"></mat-checkbox>
                   </div>
                 </mat-card-header>
-                <mat-card-content
+                <mat-card-content [ngClass]="{'disabled-card': !provider.enabled}"
                   [ngStyle]="{'max-height': provider.showFullText ? 'none' : '120px', 'overflow': 'hidden'}">
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
-                  <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
+                  <button mat-button color="primary" (click)="configureProvider(provider)"
+                    class="configure-all-time-button"
+                    style="opacity: 1 !important; pointer-events: auto; filter: none !important;"
+                    *ngIf="provider.name !== 'actusCCTranscriber'">Configure</button>
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)"
+                    [ngClass]="{'disabled-card': !provider.enabled}">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
                   <span style="flex-grow: 1;"></span>
@@ -95,18 +98,17 @@
             <mat-icon>find_replace</mat-icon>
             <h3>Text Analyzers</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'textAnalysis')">
-              <mat-card *ngFor="let provider of textAnalysisProviders" cdkDrag
-                [ngClass]="{'disabled-card': !provider.enabled}">
-                <mat-card-header>
+              <mat-card *ngFor="let provider of textAnalysisProviders" cdkDrag>
+                <mat-card-header [ngClass]="{'disabled-card': !provider.enabled}">
                   <div mat-card-avatar>
                     <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
                       height="40">
                   </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
-                  <div class="checkbox-container">
-                    <mat-checkbox [checked]="provider.enabled" color="primary"
-                      (change)="toggleProvider(provider)"></mat-checkbox>
+                  <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
+                    <mat-checkbox [checked]="provider.enabled" color="primary" (change)="toggleProvider(provider)"
+                      [disabled]="!provider.enabled"></mat-checkbox>
                   </div>
                 </mat-card-header>
                 <mat-card-content
@@ -114,8 +116,12 @@
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
-                  <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
+                  <button mat-button color="primary" (click)="configureProvider(provider)"
+                    class="configure-all-time-button"
+                    style="opacity: 1 !important; pointer-events: auto; filter: none !important;"
+                    *ngIf="provider.name !== 'actusCCTranscriber'">Configure</button>
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)"
+                    [ngClass]="{'disabled-card': !provider.enabled}">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
                   <span style="flex-grow: 1;"></span>
@@ -134,18 +140,17 @@
             <mat-icon>face</mat-icon>
             <h3>Others</h3>
             <div cdkDropList (cdkDropListDropped)="drop($event, 'others')">
-              <mat-card *ngFor="let provider of otherProviders" cdkDrag
-                [ngClass]="{'disabled-card': !provider.enabled}">
-                <mat-card-header>
+              <mat-card *ngFor="let provider of otherProviders" cdkDrag>
+                <mat-card-header [ngClass]="{'disabled-card': !provider.enabled}">
                   <div mat-card-avatar>
                     <img [src]="getProviderIcon(provider.displayName)" alt="{{ provider.displayName }}" width="40"
                       height="40">
                   </div>
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
-                  <div class="checkbox-container">
-                    <mat-checkbox [checked]="provider.enabled" color="primary"
-                      (change)="toggleProvider(provider)"></mat-checkbox>
+                  <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
+                    <mat-checkbox [checked]="provider.enabled" color="primary" (change)="toggleProvider(provider)"
+                      [disabled]="!provider.enabled"></mat-checkbox>
                   </div>
                 </mat-card-header>
                 <mat-card-content
@@ -153,8 +158,12 @@
                   <p>{{provider.description}}</p>
                 </mat-card-content>
                 <mat-card-actions>
-                  <button mat-button color="primary" (click)="configureProvider(provider)">Configure</button>
-                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)">
+                  <button mat-button color="primary" (click)="configureProvider(provider)"
+                    class="configure-all-time-button"
+                    style="opacity: 1 !important; pointer-events: auto; filter: none !important;"
+                    *ngIf="provider.name !== 'actusCCTranscriber'">Configure</button>
+                  <button mat-button color="accent" *ngIf="isDescriptionLong(provider)" (click)="toggleText(provider)"
+                    [ngClass]="{'disabled-card': !provider.enabled}">
                     {{ provider.showFullText ? 'Show Less' : 'Show More' }}
                   </button>
                   <span style="flex-grow: 1;"></span>

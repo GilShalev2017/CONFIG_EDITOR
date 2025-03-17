@@ -1,87 +1,6 @@
-<!-- <h2 mat-dialog-title>Configure {{ provider.displayName }}</h2>
-<mat-dialog-content [formGroup]="providerForm">
-  <br>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>API Internal Key</mat-label>
-    <input matInput formControlName="apiInternalKey" />
-  </mat-form-field>
-
-  <ng-container [ngSwitch]="providerType">
-    <ng-container *ngSwitchCase="'Whisper'">
-      <mat-form-field appearance="outline">
-        <mat-label>Model Type</mat-label>
-        <input matInput formControlName="modelType" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Timeout (Minutes)</mat-label>
-        <input matInput type="number" formControlName="timeoutInMinutes" />
-      </mat-form-field>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'Azure'">
-      <mat-form-field appearance="outline">
-        <mat-label>Location</mat-label>
-        <input matInput formControlName="location" />
-      </mat-form-field>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'Speechmatix'">
-      <mat-form-field appearance="outline">
-        <mat-label>Service Type</mat-label>
-        <input matInput formControlName="serviceType" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>API Key</mat-label>
-        <input matInput formControlName="apiKey" />
-      </mat-form-field>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'AzureVideoIndexer'">
-      <mat-form-field appearance="outline">
-        <mat-label>Entra Client ID</mat-label>
-        <input matInput formControlName="entraclientid" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Entra Tenant ID</mat-label>
-        <input matInput formControlName="entratenantid" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>ARM VI Location</mat-label>
-        <input matInput formControlName="armvilocation" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>ARM VI Account Name</mat-label>
-        <input matInput formControlName="armviaccountname" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>ARM VI Account ID</mat-label>
-        <input matInput formControlName="armviaccountid" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>ARM VI Subscription ID</mat-label>
-        <input matInput formControlName="armvisubscriptionid" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>ARM VI Resource Group</mat-label>
-        <input matInput formControlName="armviresourcegroup" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Languages URL</mat-label>
-        <input matInput formControlName="languagesUrl" />
-      </mat-form-field>
-    </ng-container>
-  </ng-container>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary" (click)="onSave()">Test</button>
-</mat-dialog-actions> -->
-
-
 <h2 mat-dialog-title>Configure {{ provider.displayName }}</h2>
 <mat-dialog-content [formGroup]="providerForm">
-  <br>
-  <mat-form-field appearance="outline" class="full-width">
+  <mat-form-field appearance="outline" class="full-width" style="margin-top: 10px;">
     <mat-label>API Internal Key</mat-label>
     <input matInput formControlName="apiInternalKey" />
   </mat-form-field>
@@ -155,13 +74,12 @@
 <mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancel</button>
   <button mat-button color="primary" (click)="onTestConnection()" [disabled]="isTesting">
-    {{ isTesting ? 'Testing...' : 'Test Connection' }}
+    {{ isTesting ? 'Verifying...' : 'Verify' }}
   </button>
-  <button mat-button color="primary" (click)="onSaveAndEnable()" [disabled]="!testPassed || isTesting">
+  <span [style.color]="testPassed ? 'green' : 'red'">{{ testMessage }}</span>
+  <mat-icon *ngIf="testPassed" style="color: green; margin-left: 8px;">check_circle</mat-icon>
+  <mat-icon *ngIf="!testPassed && testMessage" style="color: red; margin-left: 8px;">cancel</mat-icon>
+  <button mat-button color="accent" (click)="onSaveAndEnable()" [disabled]="!testPassed || isTesting">
     Save & Enable
   </button>
 </mat-dialog-actions>
-
-<div *ngIf="testMessage" style="margin-top: 10px;">
-  <span [style.color]="testPassed ? 'green' : 'red'">{{ testMessage }}</span>
-</div>
