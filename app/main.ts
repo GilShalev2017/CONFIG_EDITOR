@@ -265,20 +265,26 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
 
         console.log(result); // Inspect the parsed object
 
+        //for whisperTranscriber, speechMatixTranscriber (on-premise)
         if (typeof provider.apiUrl === "string" && provider.apiUrl.trim()) {
           providerToUpdate.apiUrl = [provider.apiUrl];
         }
     
+        //for azureTranslator
         if (typeof provider.location === "string" && provider.location.trim()) {
           providerToUpdate.location = [provider.location];
         }
 
+        //for azureTranslator, openAiTranscriber, speechMatixTranscriber (cloud)
         if (typeof provider.apiKey === "string" && provider.apiKey.trim()) {
           providerToUpdate.apiKey = [provider.apiKey];
         }
-        // if (provider.serviceType !== null) {
-        //     providerToUpdate.serviceType = [provider.serviceType];
-        // }
+
+        //for speechMatixTranscriber
+        if (typeof provider.serviceType === "string" && provider.serviceType.trim()) {
+          providerToUpdate.serviceType = [provider.serviceType];
+        }
+        
 
         // if (provider.entraclientid !== null) {
         //     providerToUpdate.entraclientid = [provider.entraclientid];
@@ -306,10 +312,6 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
 
         // if (provider.armviresourcegroup !== null) {
         //     providerToUpdate.armviresourcegroup = [provider.armviresourcegroup];
-        // }
-
-        // if (provider.languagesUrl !== null) {
-        //     providerToUpdate.languagesUrl = [provider.languagesUrl];
         // }
 
         const builder = new xml2js.Builder();

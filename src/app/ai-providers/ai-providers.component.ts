@@ -44,10 +44,10 @@ export class AiProvidersComponent implements OnInit {
   filteredLanguages: Observable<Language[]> = new Observable<Language[]>();
   dataSource: MatTableDataSource<Language> = new MatTableDataSource<Language>();
 
-  constructor(private electronService: ElectronService, 
-              private _formBuilder: FormBuilder,
-              private cdr: ChangeDetectorRef,
-              private dialog: MatDialog) {
+  constructor(private electronService: ElectronService,
+    private _formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -71,7 +71,7 @@ export class AiProvidersComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  
+
   async loadInisghtProvidersXml() {
     try {
       const xmlString = await this.electronService.ipcRenderer.invoke('read-insight-providers-xml');
@@ -79,22 +79,22 @@ export class AiProvidersComponent implements OnInit {
       this.providers = providersArr.map((provider: any) => {
         let enabled = false; // Default to false
         let testPass = false; // Default to false
-  
+
         // Handle 'enabled' array
         if (provider.enabled && Array.isArray(provider.enabled) && provider.enabled.length > 0) {
           enabled = provider.enabled[0] === 'true';
         }
-  
+
         // Handle 'testPass' array
         if (provider.testPass && Array.isArray(provider.testPass) && provider.testPass.length > 0) {
           testPass = provider.testPass[0] === 'true';
         }
-  
+
         if (provider.$?.name === 'actusCCTranscriber') {
           enabled = true;
           testPass = true;
         }
-  
+
         return {
           name: provider.$?.name || '',
           displayName: provider.$?.displayname || '',
@@ -127,7 +127,7 @@ export class AiProvidersComponent implements OnInit {
           testPass: testPass
         };
       });
-  
+
       this.transcriptionProviders = this.providers.filter(p => p.name.includes('Transcriber'));
       this.translationProviders = this.providers.filter(p => p.name.includes('Translator'));
       this.textAnalysisProviders = this.providers.filter(p => p.name.includes('TextAnalysis'));
@@ -175,14 +175,7 @@ export class AiProvidersComponent implements OnInit {
   }
 
   toggleProvider(provider: any) {
-    // if(provider.enabled === false && provider.testPass === false)
-    // {
-    //   this.configureProvider(provider);
-    // }
-    // else {
-      provider.enabled = !provider.enabled;
-    // }
-   
+    provider.enabled = !provider.enabled;
     this.cdr.detectChanges(); // Force update
   }
 
@@ -211,7 +204,7 @@ export class AiProvidersComponent implements OnInit {
       this.languages.unshift(this.selectedLanguage);
       this.languageControl.setValue(''); // Clear input after adding
       this.selectedLanguage = null; // Reset selected language
-      this.dataSource.data = [...this.languages]; 
+      this.dataSource.data = [...this.languages];
     }
   }
 
@@ -251,20 +244,20 @@ export class AiProvidersComponent implements OnInit {
     this.dataSource.paginator = this.paginator; // Re-assign paginator
     this.dataSource.sort = this.sort; // Re-assign sort
     this.cdr.detectChanges();
-  }  
-  
+  }
+
   cancelEdit(language: any): void {
     language.displayName = language.originalDisplayName; // Revert changes
     language.isEditing = false;
     this.cdr.detectChanges();
   }
- 
-  configureProvider(provider: Provider)  {
+
+  configureProvider(provider: Provider) {
     const dialogRef = this.dialog.open(ConfigureProviderComponent, {
-      width: '450px',
+      width: '470px',
       data: { provider: { ...provider } } // Pass a copy
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // Update the provider with the result directly
@@ -285,7 +278,7 @@ export class AiProvidersComponent implements OnInit {
       console.error('No language data available to save.');
       return;
     }
-  
+
     try {
       const response = await this.electronService.ipcRenderer.invoke('save-ai-languages-xml', languagesData);
       console.log(response);
