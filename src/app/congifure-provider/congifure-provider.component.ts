@@ -59,7 +59,7 @@ export class ConfigureProviderComponent implements OnInit {
   get providerType(): string {
     if (this.provider.name.includes('openAiTranscriber')) return 'OpenAiTranscriber';
     if (this.provider.name.includes('whisperTranscriber')) return 'WhisperTranscriber';
-    if (this.provider.name.includes('Azure')) return 'Azure';
+    if (this.provider.name.includes('azureTranslator')) return 'AzureTranslator';
     if (this.provider.name.includes('Speechmatix')) return 'Speechmatix';
     if (this.provider.name.includes('AzureVideoIndexer')) return 'AzureVideoIndexer';
     return 'Unknown';

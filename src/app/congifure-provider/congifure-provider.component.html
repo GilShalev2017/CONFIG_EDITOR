@@ -1,8 +1,8 @@
 <h2 mat-dialog-title>Configure {{ provider.displayName }}</h2>
 <mat-dialog-content [formGroup]="providerForm">
-  
+
   <ng-container [ngSwitch]="providerType">
-  
+
     <ng-container *ngSwitchCase="'OpenAiTranscriber'">
       <mat-radio-group formControlName="apiKeyType" style="margin-bottom: 10px;">
         <mat-radio-button value="client">Use Client API Key</mat-radio-button>
@@ -10,7 +10,7 @@
       </mat-radio-group>
       <mat-form-field appearance="outline" class="full-width" style="margin-top: 10px;"
         *ngIf="providerForm.get('apiKeyType')?.value === 'client'">
-        <mat-label>Fill API Key</mat-label>
+        <mat-label>API Key</mat-label>
         <input matInput formControlName="apiKey" />
       </mat-form-field>
     </ng-container>
@@ -22,8 +22,20 @@
       </mat-form-field>
     </ng-container>
 
-    <ng-container *ngSwitchCase="'Azure'">
-      <mat-form-field appearance="outline">
+    <ng-container *ngSwitchCase="'AzureTranslator'">
+      <mat-radio-group formControlName="apiKeyType" style="margin-bottom: 10px;">
+        <mat-radio-button value="client">Use Client API Key</mat-radio-button>
+        <mat-radio-button value="actus" style="margin-left: 16px;">Use Actus API Key</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field appearance="outline" class="full-width" style="margin-top: 10px;"
+        *ngIf="providerForm.get('apiKeyType')?.value === 'client'">
+        <mat-label>API Key</mat-label>
+        <input matInput formControlName="apiKey" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width"
+        *ngIf="providerForm.get('apiKeyType')?.value === 'client'">
         <mat-label>Location</mat-label>
         <input matInput formControlName="location" />
       </mat-form-field>

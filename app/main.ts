@@ -207,11 +207,12 @@ ipcMain.handle('test-provider', async (event, provider) => {
 
 ipcMain.handle('test-provider-connection', async (event, provider) => {
   try {
+    const apiUrlParam = provider.apiUrl ? `&apiUrl=${provider.apiUrl}` : '';
+ 
     const response = await axios.get(
-      `http://localhost:8894/intelligence/api/aiprovider/testconnection?providerId=${provider.apiInternalKey}`
+      `http://localhost:8894/intelligence/api/aiprovider/testconnection?providerId=${provider.apiInternalKey}${apiUrlParam}`
     );
 
-    console.log('API Response:', response.data);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -267,34 +268,17 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
         if (typeof provider.apiUrl === "string" && provider.apiUrl.trim()) {
           providerToUpdate.apiUrl = [provider.apiUrl];
         }
-
-        // if (provider.apiInternalKey !== null) {
-        //   providerToUpdate.apiInternalKey = [provider.apiInternalKey];
-        // }
-
-        // if (provider.onPremise !== null) {
-        //   providerToUpdate.onPremise = [String(provider.onPremise)];
-        // }
-
-        // if (provider.modelType !== null) {
-        //     providerToUpdate.modelType = [provider.modelType];
-        // }
-
-        // if (provider.timeoutInMinutes !== null) {
-        //     providerToUpdate.timeoutInMinutes = [String(provider.timeoutInMinutes)];
-        // }
-
-        // if (provider.location !== null) {
-        //     providerToUpdate.location = [provider.location];
-        // }
-
-        // if (provider.serviceType !== null) {
-        //     providerToUpdate.serviceType = [provider.serviceType];
-        // }
+    
+        if (typeof provider.location === "string" && provider.location.trim()) {
+          providerToUpdate.location = [provider.location];
+        }
 
         if (typeof provider.apiKey === "string" && provider.apiKey.trim()) {
           providerToUpdate.apiKey = [provider.apiKey];
         }
+        // if (provider.serviceType !== null) {
+        //     providerToUpdate.serviceType = [provider.serviceType];
+        // }
 
         // if (provider.entraclientid !== null) {
         //     providerToUpdate.entraclientid = [provider.entraclientid];
