@@ -23,14 +23,18 @@ export class ConfigureProviderComponent implements OnInit {
     private fb: FormBuilder,
     private electronService: ElectronService
   ) {
+  
     this.provider = { ...data.provider }; // Create a copy
+  
     this.providerForm = this.fb.group({
+      apiKeyType: ['client'], // Default to 'client'
       apiInternalKey: [this.provider.apiInternalKey, Validators.required],
+      apiKey: [this.provider.apiKey],
+      apiUrl: [this.provider.apiUrl],
       modelType: [this.provider.modelType],
       timeoutInMinutes: [this.provider.timeoutInMinutes],
       location: [this.provider.location],
       serviceType: [this.provider.serviceType],
-      apiKey: [this.provider.apiKey],
       entraclientid: [this.provider.entraclientid],
       entratenantid: [this.provider.entratenantid],
       armvilocation: [this.provider.armvilocation],
@@ -39,15 +43,12 @@ export class ConfigureProviderComponent implements OnInit {
       armvisubscriptionid: [this.provider.armvisubscriptionid],
       armviresourcegroup: [this.provider.armviresourcegroup],
       languagesUrl: [this.provider.languagesUrl],
-
       enabled: [this.provider.enabled],
       testPass: [this.provider.testPass],
     });
   }
 
-  ngOnInit(): void {
-    // Optionally perform logic based on provider type here
-  }
+  ngOnInit(): void {}
 
   onSave(): void {
     if (this.providerForm.valid) {
@@ -56,7 +57,8 @@ export class ConfigureProviderComponent implements OnInit {
   }
 
   get providerType(): string {
-    if (this.provider.name.includes('Whisper')) return 'Whisper';
+    if (this.provider.name.includes('openAiTranscriber')) return 'OpenAiTranscriber';
+    if (this.provider.name.includes('whisperTranscriber')) return 'WhisperTranscriber';
     if (this.provider.name.includes('Azure')) return 'Azure';
     if (this.provider.name.includes('Speechmatix')) return 'Speechmatix';
     if (this.provider.name.includes('AzureVideoIndexer')) return 'AzureVideoIndexer';
@@ -75,7 +77,6 @@ export class ConfigureProviderComponent implements OnInit {
         this.testPassed = Boolean(testConnectionResult);
         this.testMessage = this.testPassed ? 'Verified' : 'Not Verified';
       } catch (error) {
-        console.error('Error testing provider:', error);
         this.testMessage = 'Not Verified';
         this.testPassed = false;
       } finally {
@@ -94,7 +95,6 @@ export class ConfigureProviderComponent implements OnInit {
         this.dialogRef.close({ ...this.provider, ...this.providerForm.value, enabled: true, testPass: true });
       } catch (error) {
         console.error('Error saving provider configuration:', error);
-        // Display an error message to the user
       }
     }
   }
@@ -103,4 +103,18 @@ export class ConfigureProviderComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  get isVerifyDisabled(): boolean {
+    const apiKeyType = this.providerForm.get('apiKeyType')?.value;
+    const apiKey = this.providerForm.get('apiKey')?.value;
+  
+    if (this.isTesting) return true;
+   
+    if (this.provider.name === 'openAiTranscriber' &&  apiKeyType === 'client') {
+      if (!apiKey || typeof apiKey !== 'string' || apiKey.trim() === '') {
+        return true;
+      }
+    }
+    return false;
+  }
+  
 }

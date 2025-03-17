@@ -264,22 +264,9 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
 
         console.log(result); // Inspect the parsed object
 
-        // Update other relevant fields if they exist in the provider object and xml.
-        // if (provider.displayName !== null) {
-        //   providerToUpdate.displayname = [provider.displayName];
-        // }
-
-        // if (provider.description !== null) {
-        //   providerToUpdate.description = [provider.description];
-        // }
-
-        // if (provider.cost !== null) {
-        //   providerToUpdate.cost = [String(provider.cost)];
-        // }
-
-        // if (provider.apiUrl !== null) {
-        //   providerToUpdate.apiUrl = [provider.apiUrl];
-        // }
+        if (typeof provider.apiUrl === "string" && provider.apiUrl.trim()) {
+          providerToUpdate.apiUrl = [provider.apiUrl];
+        }
 
         // if (provider.apiInternalKey !== null) {
         //   providerToUpdate.apiInternalKey = [provider.apiInternalKey];
@@ -305,9 +292,9 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
         //     providerToUpdate.serviceType = [provider.serviceType];
         // }
 
-        // if (provider.apiKey !== null) {
-        //     providerToUpdate.apiKey = [provider.apiKey];
-        // }
+        if (typeof provider.apiKey === "string" && provider.apiKey.trim()) {
+          providerToUpdate.apiKey = [provider.apiKey];
+        }
 
         // if (provider.entraclientid !== null) {
         //     providerToUpdate.entraclientid = [provider.entraclientid];

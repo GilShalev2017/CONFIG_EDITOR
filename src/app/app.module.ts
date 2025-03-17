@@ -29,7 +29,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableModule} from '@angular/material/table';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import { MatDialogModule } from '@angular/material/dialog';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatRadioModule} from '@angular/material/radio';
 
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
@@ -83,7 +84,8 @@ import { ConfigureProviderComponent } from './congifure-provider/congifure-provi
     MatTableModule,
     MatAutocompleteModule,
     MatDialogModule,
-
+    MatRadioModule,
+    
     FormsModule,
     ReactiveFormsModule,
     

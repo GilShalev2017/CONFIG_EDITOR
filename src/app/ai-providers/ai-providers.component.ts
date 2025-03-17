@@ -375,7 +375,7 @@ export class AiProvidersComponent implements OnInit {
  
   configureProvider(provider: Provider)  {
     const dialogRef = this.dialog.open(ConfigureProviderComponent, {
-      width: '400px',
+      width: '450px',
       data: { provider: { ...provider } } // Pass a copy
     });
   
@@ -391,68 +391,7 @@ export class AiProvidersComponent implements OnInit {
         }
       }
     });
-
-    // dialogRef.afterClosed().subscribe(async result => {
-    //   if (result) {
-    //     // Update the provider with the result
-    //     const index = this.providers.findIndex(p => p.name === result.name);
-    //     if (index !== -1) {
-    //       this.providers[index] = result;
-    //       try {
-    //         //const testResult = await this.electronService.ipcRenderer.invoke('test-provider', provider);
-    //         const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', provider);
-    //         //provider.testPass = Boolean(testResult); // Ensure it's a boolean
-    //         provider.testPass = Boolean(testConnectionResult); // Ensure it's a boolean
-    //       } catch (error) {
-    //         console.error('Error testing provider:', error);
-    //         provider.testPass = false;
-    //       }
-    //       // this.loadInisghtProvidersXml();
-    //       provider.enabled = provider.testPass;
-    //       this.cdr.detectChanges();
-    //     }
-    //   }
-    // });
   }
-
-  //configureProvider(provider: Provider) {
-    // const dialogRef = this.dialog.open(ConfigureProviderComponent, {
-    //   width: '400px',
-    //   data: { provider: { ...provider } }
-    // });
-  
-    // dialogRef.afterClosed().subscribe(async result => {
-    //   if (result) {
-    //     const index = this.providers.findIndex(p => p.name === result.name);
-    //     if (index !== -1) {
-    //       // Update the provider with the dialog result
-    //       this.providers[index] = result;
-    //       const currentProvider = this.providers[index];
-  
-    //       // Immediately disable the provider and update the UI
-    //       currentProvider.enabled = false;
-    //       this.cdr.detectChanges();
-  
-    //       // try {
-    //       //   const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', currentProvider);
-    //       //   currentProvider.testPass = Boolean(testConnectionResult);
-    //       //   currentProvider.enabled = currentProvider.testPass;
-  
-    //       // } catch (error) {
-    //       //   console.error('Error testing provider:', error);
-    //       //   currentProvider.testPass = false;
-    //       //   currentProvider.enabled = false;
-    //       // }
-  
-    //       currentProvider.testPass = true;
-    //       currentProvider.enabled = true;
-
-    //       // Manually trigger change detection after updating the provider
-    //       this.cdr.detectChanges();
-    //     }
-    //   }
-    // });
-  //}
 
   async saveLanguages() {
     const languagesData = this.dataSource?.data || this.languages;
