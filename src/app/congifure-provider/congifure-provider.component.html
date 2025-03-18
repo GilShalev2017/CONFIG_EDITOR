@@ -1,9 +1,21 @@
-<h2 mat-dialog-title>Configure {{ provider.displayName }}</h2>
+<h2 mat-dialog-title>Configure {{provider.name}}</h2>
 <mat-dialog-content [formGroup]="providerForm">
 
   <ng-container [ngSwitch]="providerType">
 
     <ng-container *ngSwitchCase="'OpenAiTranscriber'">
+      <mat-radio-group formControlName="apiKeyType" style="margin-bottom: 10px;">
+        <mat-radio-button value="client">Use Client API Key</mat-radio-button>
+        <mat-radio-button value="actus" style="margin-left: 16px;">Use Actus API Key</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field appearance="outline" class="full-width" style="margin-top: 10px;"
+        *ngIf="providerForm.get('apiKeyType')?.value === 'client'">
+        <mat-label>API Key</mat-label>
+        <input matInput formControlName="apiKey" />
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'OpenAiTextAnalysis'">
       <mat-radio-group formControlName="apiKeyType" style="margin-bottom: 10px;">
         <mat-radio-button value="client">Use Client API Key</mat-radio-button>
         <mat-radio-button value="actus" style="margin-left: 16px;">Use Actus API Key</mat-radio-button>
@@ -59,41 +71,38 @@
 
     </ng-container>
 
-    <ng-container *ngSwitchCase="'AzureVideoIndexer'">
-      <mat-form-field appearance="outline">
+    <ng-container *ngSwitchCase="'AzureVideoIndexer'" >
+      <mat-form-field appearance="outline" class="full-width" style="margin-top: 10px;">
         <mat-label>Entra Client ID</mat-label>
         <input matInput formControlName="entraclientid" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Entra Tenant ID</mat-label>
         <input matInput formControlName="entratenantid" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>ARM VI Location</mat-label>
         <input matInput formControlName="armvilocation" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>ARM VI Account Name</mat-label>
         <input matInput formControlName="armviaccountname" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>ARM VI Account ID</mat-label>
         <input matInput formControlName="armviaccountid" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>ARM VI Subscription ID</mat-label>
         <input matInput formControlName="armvisubscriptionid" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>ARM VI Resource Group</mat-label>
         <input matInput formControlName="armviresourcegroup" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Languages URL</mat-label>
-        <input matInput formControlName="languagesUrl" />
-      </mat-form-field>
     </ng-container>
   </ng-container>
+
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancel</button>

@@ -23,16 +23,14 @@ export class ConfigureProviderComponent implements OnInit {
     private fb: FormBuilder,
     private electronService: ElectronService
   ) {
-  
+
     this.provider = { ...data.provider }; // Create a copy
-  
+
     this.providerForm = this.fb.group({
       apiKeyType: ['client'], // Default to 'client'
       apiInternalKey: [this.provider.apiInternalKey, Validators.required],
       apiKey: [this.provider.apiKey],
       apiUrl: [this.provider.apiUrl],
-      // modelType: [this.provider.modelType],
-      // timeoutInMinutes: [this.provider.timeoutInMinutes],
       location: [this.provider.location],
       serviceType: this.provider.serviceType || 'cloud',
       entraclientid: [this.provider.entraclientid],
@@ -61,7 +59,9 @@ export class ConfigureProviderComponent implements OnInit {
     if (this.provider.name.includes('whisperTranscriber')) return 'WhisperTranscriber';
     if (this.provider.name.includes('azureTranslator')) return 'AzureTranslator';
     if (this.provider.name.includes('speechMatixTranscriber')) return 'SpeechmatixTranscriber';
-    if (this.provider.name.includes('AzureVideoIndexer')) return 'AzureVideoIndexer';
+    if (this.provider.name.includes('azureVideoIndexer')) return 'AzureVideoIndexer';
+    if (this.provider.name.includes('openAiTextAnalysis')) return 'OpenAiTextAnalysis';
+
     return 'Unknown';
   }
 
@@ -106,15 +106,21 @@ export class ConfigureProviderComponent implements OnInit {
   get isVerifyDisabled(): boolean {
     const apiKeyType = this.providerForm.get('apiKeyType')?.value;
     const apiKey = this.providerForm.get('apiKey')?.value;
-  
+
     if (this.isTesting) return true;
-   
-    if (this.provider.name === 'openAiTranscriber' &&  apiKeyType === 'client') {
+
+    if (this.provider.name === 'openAiTranscriber' && apiKeyType === 'client') {
       if (!apiKey || typeof apiKey !== 'string' || apiKey.trim() === '') {
         return true;
       }
     }
+
+    if (this.provider.name === 'openAiTextAnalysis' && apiKeyType === 'client') {
+      if (!apiKey || typeof apiKey !== 'string' || apiKey.trim() === '') {
+        return true;
+      }
+    }
+
     return false;
   }
-  
 }

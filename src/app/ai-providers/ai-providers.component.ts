@@ -136,7 +136,6 @@ export class AiProvidersComponent implements OnInit {
         !this.translationProviders.includes(p) &&
         !this.textAnalysisProviders.includes(p)
       );
-      console.log(this.transcriptionProviders);
     } catch (error) {
       console.error('Error loading XML:', error);
     }
@@ -258,7 +257,7 @@ export class AiProvidersComponent implements OnInit {
       data: { provider: { ...provider } } // Pass a copy
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result) {
         // Update the provider with the result directly
         const index = this.providers.findIndex(p => p.name === result.name);
@@ -267,6 +266,7 @@ export class AiProvidersComponent implements OnInit {
           provider.enabled = result.enabled;
           provider.testPass = result.testPass;
           this.cdr.detectChanges(); // Trigger change detection
+          await this.loadInisghtProvidersXml();
         }
       }
     });

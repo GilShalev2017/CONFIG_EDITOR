@@ -285,34 +285,34 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
           providerToUpdate.serviceType = [provider.serviceType];
         }
         
+        //for azureVideoIndexer
+        if (typeof provider.entraclientid === "string" && provider.entraclientid.trim()) {
+          providerToUpdate.entraclientid = [provider.entraclientid];
+        }
+     
+        if (typeof provider.entratenantid === "string" && provider.entratenantid.trim()) {
+          providerToUpdate.entratenantid = [provider.entratenantid];
+        }
 
-        // if (provider.entraclientid !== null) {
-        //     providerToUpdate.entraclientid = [provider.entraclientid];
-        // }
+        if (typeof provider.armvilocation === "string" && provider.armvilocation.trim()) {
+          providerToUpdate.armvilocation = [provider.armvilocation];
+        }
+        
+        if (typeof provider.armviaccountname === "string" && provider.armviaccountname.trim()) {
+          providerToUpdate.armviaccountname = [provider.armviaccountname];
+        }
+          
+        if (typeof provider.armviaccountid === "string" && provider.armviaccountid.trim()) {
+          providerToUpdate.armviaccountid = [provider.armviaccountid];
+        }
 
-        // if (provider.entratenantid !== null) {
-        //     providerToUpdate.entratenantid = [provider.entratenantid];
-        // }
+        if (typeof provider.armvisubscriptionid === "string" && provider.armvisubscriptionid.trim()) {
+          providerToUpdate.armvisubscriptionid = [provider.armvisubscriptionid];
+        }
 
-        // if (provider.armvilocation !== null) {
-        //     providerToUpdate.armvilocation = [provider.armvilocation];
-        // }
-
-        // if (provider.armviaccountname !== null) {
-        //     providerToUpdate.armviaccountname = [provider.armviaccountname];
-        // }
-
-        // if (provider.armviaccountid !== null) {
-        //     providerToUpdate.armviaccountid = [provider.armviaccountid];
-        // }
-
-        // if (provider.armvisubscriptionid !== null) {
-        //     providerToUpdate.armvisubscriptionid = [provider.armvisubscriptionid];
-        // }
-
-        // if (provider.armviresourcegroup !== null) {
-        //     providerToUpdate.armviresourcegroup = [provider.armviresourcegroup];
-        // }
+        if (typeof provider.armviresourcegroup === "string" && provider.armviresourcegroup.trim()) {
+          providerToUpdate.armviresourcegroup = [provider.armviresourcegroup];
+        }
 
         const builder = new xml2js.Builder();
 
