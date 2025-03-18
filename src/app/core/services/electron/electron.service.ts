@@ -54,16 +54,4 @@ export class ElectronService {
     return !!(window && window.process && window.process.type);
   }
 
-  // async editXml(newData: any): Promise<string> {
-  //   if (!this.isElectron) {
-  //     return Promise.reject('Not running in Electron environment');
-  //   }
-  //   try {
-  //     const response = await this.ipcRenderer.invoke('save-insight-providers-xml', newData);
-  //     return response;
-  //   } catch (error) {
-  //     console.error('Error editing XML:', error);
-  //     throw error; // Re-throw the error to be handled by the caller
-  //   }
-  // }
 }

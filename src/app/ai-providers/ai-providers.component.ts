@@ -141,15 +141,82 @@ export class AiProvidersComponent implements OnInit {
     }
   }
 
-  drop(event: CdkDragDrop<any[]>, type: string) {
-    if (type === 'transcription') {
-      moveItemInArray(this.transcriptionProviders, event.previousIndex, event.currentIndex);
-    } else if (type === 'translation') {
-      moveItemInArray(this.translationProviders, event.previousIndex, event.currentIndex);
-    } else if (type === 'textAnalysis') {
-      moveItemInArray(this.textAnalysisProviders, event.previousIndex, event.currentIndex);
-    } else if (type === 'others') {
-      moveItemInArray(this.otherProviders, event.previousIndex, event.currentIndex);
+  // drop(event: CdkDragDrop<any[]>, type: string) {
+  //   if (type === 'transcription') {
+  //     moveItemInArray(this.transcriptionProviders, event.previousIndex, event.currentIndex);
+  //   } else if (type === 'translation') {
+  //     moveItemInArray(this.translationProviders, event.previousIndex, event.currentIndex);
+  //   } else if (type === 'textAnalysis') {
+  //     moveItemInArray(this.textAnalysisProviders, event.previousIndex, event.currentIndex);
+  //   } else if (type === 'others') {
+  //     moveItemInArray(this.otherProviders, event.previousIndex, event.currentIndex);
+  //   }
+  // }
+
+  async drop(event: CdkDragDrop<any[]>, type: string) {
+    let providersArray: any[];
+  
+    switch (type) {
+      case 'transcription':
+        providersArray = this.transcriptionProviders;
+        break;
+      case 'translation':
+        providersArray = this.translationProviders;
+        break;
+      case 'textAnalysis':
+        providersArray = this.textAnalysisProviders;
+        break;
+      case 'others':
+        providersArray = this.otherProviders;
+        break;
+      default:
+        return; 
+    }
+  
+    if(providersArray.length <= 1)
+    {
+      return;
+    }
+
+    // Move the item within the array
+    moveItemInArray(providersArray, event.previousIndex, event.currentIndex);
+  
+    // Update the global providers array
+    this.updateProvidersOrder();
+  
+    // Save the updated XML
+    this.saveOrderedProvidersToXml(this.providers);
+
+    await this.reLaunchActIntelligenceService(); 
+
+    console.log("RELAUNCHED !!!");
+  }
+
+  updateProvidersOrder() {
+    // Merge back the reordered providers into the main array while maintaining original filtering logic
+    this.providers = [
+      ...this.transcriptionProviders,
+      ...this.translationProviders,
+      ...this.textAnalysisProviders,
+      ...this.otherProviders
+    ];
+  }
+
+  async reLaunchActIntelligenceService() {
+    try {
+      const response = await this.electronService.ipcRenderer.invoke('re-launch-actintelligenceservice');
+      console.log(response);
+    } catch (error) {
+      console.error('Failed to save ordered providers to XML:', error);
+    }
+  }
+
+  async saveOrderedProvidersToXml(providers : Provider[]) {
+    try {
+      const response = await this.electronService.ipcRenderer.invoke('save-insight-providers-xml', providers);
+      console.log(response);
+    } catch (error) {
+      console.error('Failed to save ordered providers to XML:', error);
     }
   }
 
@@ -173,10 +240,12 @@ export class AiProvidersComponent implements OnInit {
     return description.length > 100;
   }
 
-  toggleProvider(provider: any) {
+  async toggleProvider(provider: any) {
     provider.enabled = !provider.enabled;
     this.updateProviderAvailability(provider);
     this.cdr.detectChanges(); // Force update
+
+    await this.reLaunchActIntelligenceService(); 
   }
 
   async updateProviderAvailability(provider: any) {

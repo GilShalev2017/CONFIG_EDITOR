@@ -74,6 +74,9 @@ export class ConfigureProviderComponent implements OnInit {
 
       try {
         const testConnectionResult = await this.electronService.ipcRenderer.invoke('test-provider-connection', providerData);
+
+        //await this.reLaunchActIntelligenceService(); 
+
         this.testPassed = Boolean(testConnectionResult);
         this.testMessage = this.testPassed ? 'Verified' : 'Not Verified';
       } catch (error) {
@@ -92,10 +95,22 @@ export class ConfigureProviderComponent implements OnInit {
         providerData.enabled = true;
         providerData.testPass = true;
         await this.electronService.ipcRenderer.invoke('save-provider-configuration', providerData);
+
+        await this.reLaunchActIntelligenceService(); 
+
         this.dialogRef.close({ ...this.provider, ...this.providerForm.value, enabled: true, testPass: true });
       } catch (error) {
         console.error('Error saving provider configuration:', error);
       }
+    }
+  }
+
+  async reLaunchActIntelligenceService() {
+    try {
+      const response = await this.electronService.ipcRenderer.invoke('re-launch-actintelligenceservice');
+      console.log(response);
+    } catch (error) {
+      console.error('Failed to save ordered providers to XML:', error);
     }
   }
 

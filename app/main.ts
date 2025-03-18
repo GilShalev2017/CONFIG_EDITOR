@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as xml2js from 'xml2js';
 import axios, { AxiosError } from 'axios';
+import { Provider } from '../src/app/models/model';
+import { exec, execSync } from 'child_process';
 
 //TODO read the paths from a dedicated path, filled by the user where C:\Actus\Config is located!
 const insightProvidersXmlFilePath = "C:\\ActDev\\src\\Services\\ActIntelligenceService\\InsightProviders.xml";//path.join(app.getPath('userData'), 'config.xml'); // Example path
@@ -46,18 +48,17 @@ ipcMain.handle('read-insight-providers-xml', async (event) => {
   });
 });
 
-ipcMain.handle('save-insight-providers-xml', async (event, newData) => {
-  return new Promise((resolve, reject) => {
-    writeXml(insightProvidersXmlFilePath, newData, (writeErr) => {
-      if (writeErr) {
-        reject(writeErr);
-      } else {
-        resolve('XML updated successfully');
-      }
-    });
-  });
-});
-
+// ipcMain.handle('save-insight-providers-xml', async (event, newData) => {
+//   return new Promise((resolve, reject) => {
+//     writeXml(insightProvidersXmlFilePath, newData, (writeErr) => {
+//       if (writeErr) {
+//         reject(writeErr);
+//       } else {
+//         resolve('XML updated successfully');
+//       }
+//     });
+//   });
+// });
 
 ipcMain.handle('read-ai-languages-xml', async (event) => {
   return new Promise((resolve, reject) => {
@@ -329,6 +330,126 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
     });
   });
 });
+
+ipcMain.handle('save-insight-providers-xml', async (event, newProviders: Provider[]) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(insightProvidersXmlFilePath, 'utf8', (readErr, xmlData) => {
+      if (readErr) {
+        reject(readErr);
+        return;
+      }
+
+      xml2js.parseString(xmlData, (parseErr, result) => {
+        if (parseErr) {
+          reject(parseErr);
+          return;
+        }
+
+        // Use the correct XML structure
+        if (!result.configuration || !result.configuration.aiProviders || !result.configuration.aiProviders[0].provider) {
+          reject(new Error('Invalid XML structure: Missing <configuration><aiProviders><provider> elements.'));
+          return;
+        }
+
+        // Get the providers array
+        const providers = result.configuration.aiProviders[0].provider;
+
+        // Ensure providers is an array
+        if (!Array.isArray(providers)) {
+          reject(new Error('Invalid XML structure: <provider> should be an array.'));
+          return;
+        }
+
+        // Update provider order while keeping the original XML structure
+        result.configuration.aiProviders[0].provider = newProviders.map((newProvider: Provider) => {
+          const existingProvider = providers.find((p: any) => p.$.name === newProvider.name);
+          if (existingProvider) {
+            existingProvider.$.position = String(newProviders.indexOf(newProvider));
+            return existingProvider;
+          } else {
+            return { $: { name: newProvider.name, position: String(newProviders.indexOf(newProvider)) } };
+          }
+        });
+
+        const builder = new xml2js.Builder();
+        const updatedXml = builder.buildObject(result);
+
+        fs.writeFile(insightProvidersXmlFilePath, updatedXml, 'utf8', (writeErr) => {
+          if (writeErr) {
+            reject(writeErr);
+          } else {
+            resolve('Provider order updated successfully');
+          }
+        });
+      });
+    });
+  });
+});
+
+function killProcess(processName: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const command = process.platform === 'win32'
+      ? `taskkill /F /IM ${processName}`
+      : `pkill -f ${processName}`;
+
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error killing process: ${error.message}`);
+        reject(error);
+        return;
+      }
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+      }
+      console.log(`Process ${processName} terminated successfully.`);
+      resolve();
+    });
+  });
+}
+
+function isProcessRunning(processName: string): boolean {
+  try {
+    const command = process.platform === 'win32'
+      ? `tasklist | findstr /I ${processName}`
+      : `pgrep -f ${processName}`;
+
+    const output = execSync(command).toString();
+    return output.includes(processName);
+  } catch {
+    return false;
+  }
+}
+
+async function waitForProcessToStart(processName: string, timeout: number = 5000, interval: number = 2000): Promise<void> {
+  console.log(`Waiting for ${processName} to start...`);
+
+  const startTime = Date.now();
+  while (Date.now() - startTime < timeout) {
+    if (isProcessRunning(processName)) {
+      console.log(`Process ${processName} is running again!`);
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, interval));
+  }
+
+  throw new Error(`Timeout: ${processName} did not start within ${timeout / 1000} seconds.`);
+}
+
+async function restartWatcherProcess(processName: string) {
+  try {
+    await killProcess(processName);
+    await waitForProcessToStart(processName);
+    console.log(`${processName} has restarted.`);
+  } catch (error) {
+    console.error(`Error in restart process: ${error}`);
+  }
+}
+
+ipcMain.handle('re-launch-actintelligenceservice', async (event) => {
+  await restartWatcherProcess('ActIntelligenceService.exe');
+  return 'ActIntelligenceService.exe has been re-launched successfully.';
+});
+
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1), serve = args.some(val => val === '--serve');
