@@ -24,7 +24,7 @@
                   <mat-card-title>{{ provider.displayName }}</mat-card-title>
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                   <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
-                    <mat-checkbox [checked]="provider.enabled" color="primary" [disabled]="!provider.enabled"
+                    <mat-checkbox [checked]="provider.enabled" color="primary" [disabled]="!provider.testPass"
                       (change)="toggleProvider(provider)"></mat-checkbox>
                   </div>
                 </mat-card-header>
@@ -67,7 +67,7 @@
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                   <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
                     <mat-checkbox [checked]="provider.enabled" color="primary" (change)="toggleProvider(provider)"
-                      [disabled]="!provider.enabled"></mat-checkbox>
+                      [disabled]="!provider.testPass"></mat-checkbox>
                   </div>
                 </mat-card-header>
                 <mat-card-content [ngClass]="{'disabled-card': !provider.enabled}"
@@ -108,7 +108,7 @@
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                   <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
                     <mat-checkbox [checked]="provider.enabled" color="primary" (change)="toggleProvider(provider)"
-                      [disabled]="!provider.enabled"></mat-checkbox>
+                      [disabled]="!provider.testPass"></mat-checkbox>
                   </div>
                 </mat-card-header>
                 <mat-card-content
@@ -150,7 +150,7 @@
                   <mat-card-subtitle>{{ provider.name }}</mat-card-subtitle>
                   <div class="checkbox-container" [ngClass]="{'disabled-card': !provider.enabled}">
                     <mat-checkbox [checked]="provider.enabled" color="primary" (change)="toggleProvider(provider)"
-                      [disabled]="!provider.enabled"></mat-checkbox>
+                      [disabled]="!provider.testPass"></mat-checkbox>
                   </div>
                 </mat-card-header>
                 <mat-card-content

@@ -175,9 +175,13 @@ export class AiProvidersComponent implements OnInit {
 
   toggleProvider(provider: any) {
     provider.enabled = !provider.enabled;
+    this.updateProviderAvailability(provider);
     this.cdr.detectChanges(); // Force update
   }
 
+  async updateProviderAvailability(provider: any) {
+    await this.electronService.ipcRenderer.invoke('save-provider-configuration', provider);
+  }
 
   private _filter(value: string | Language): Language[] {
     let filterValue = '';

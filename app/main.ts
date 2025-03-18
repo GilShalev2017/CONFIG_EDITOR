@@ -208,7 +208,7 @@ ipcMain.handle('test-provider', async (event, provider) => {
 ipcMain.handle('test-provider-connection', async (event, provider) => {
   try {
     const apiUrlParam = provider.apiUrl ? `&apiUrl=${provider.apiUrl}` : '';
- 
+
     const response = await axios.get(
       `http://localhost:8894/intelligence/api/aiprovider/testconnection?providerId=${provider.apiInternalKey}${apiUrlParam}`
     );
@@ -269,7 +269,7 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
         if (typeof provider.apiUrl === "string" && provider.apiUrl.trim()) {
           providerToUpdate.apiUrl = [provider.apiUrl];
         }
-    
+
         //for azureTranslator
         if (typeof provider.location === "string" && provider.location.trim()) {
           providerToUpdate.location = [provider.location];
@@ -284,12 +284,12 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
         if (typeof provider.serviceType === "string" && provider.serviceType.trim()) {
           providerToUpdate.serviceType = [provider.serviceType];
         }
-        
+
         //for azureVideoIndexer
         if (typeof provider.entraclientid === "string" && provider.entraclientid.trim()) {
           providerToUpdate.entraclientid = [provider.entraclientid];
         }
-     
+
         if (typeof provider.entratenantid === "string" && provider.entratenantid.trim()) {
           providerToUpdate.entratenantid = [provider.entratenantid];
         }
@@ -297,11 +297,11 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
         if (typeof provider.armvilocation === "string" && provider.armvilocation.trim()) {
           providerToUpdate.armvilocation = [provider.armvilocation];
         }
-        
+
         if (typeof provider.armviaccountname === "string" && provider.armviaccountname.trim()) {
           providerToUpdate.armviaccountname = [provider.armviaccountname];
         }
-          
+
         if (typeof provider.armviaccountid === "string" && provider.armviaccountid.trim()) {
           providerToUpdate.armviaccountid = [provider.armviaccountid];
         }
@@ -329,7 +329,6 @@ ipcMain.handle('save-provider-configuration', async (event, provider) => {
     });
   });
 });
-
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1), serve = args.some(val => val === '--serve');
